@@ -25,7 +25,7 @@ SECRET_KEY = '^11=*a@$5#pftmawhcp&uqajkds@ch5$y9qp&(+n+8b9m7*(al'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['moview1.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','moview1.herokuapp.com']
 
 
 # Application definition

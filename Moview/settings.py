@@ -77,7 +77,7 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Moviewdb',
+        'NAME': 'moviewdb',
         'USER': 'moviewuser',
         'PASSWORD': '1234',
         'HOST': 'localhost'

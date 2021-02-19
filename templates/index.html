@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your review to the world with the best movie commmunity">
+    <meta name="keywords" content="movie review ratings community">
+    <meta name="author" content="Bhardvaj, Kuldeep, Deep, Jenish, Shruti">
+
+    <!-- Google font: Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tablet.css' %}" media="screen and (max-width: 600px)">
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}" media="screen and (max-width: 500px)">
+
+    <!-- title -->
+    <title>Moview - Welcome</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <a href="#"><img src="{% static 'img/Logo.svg' %}" alt="Moview"></a>
+            </div>
+            <div class="login-register">
+                <a href="Login_page/login.html" class="btn btn-primary">LOGIN</a>
+                <a href="Register_page/register.html" class="btn btn-secondary register">REGISTER</a>
+            </div>
+        </nav>
+    </div>
+    <!-- End Navbar -->
+
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <div class="main">
+                <div class="left">
+                    <h1 class="heading-1">Every movie matters, <br> Share your view</h1>
+                    <a href="#" class="btn btn-primary">LET'S GET STARTED</a>
+                </div>
+                <div class="right">
+
+                </div>
+            </div>
+            <div class="trending">
+                <div class="content">
+                    <div class="trending-head">
+                        <p class="lable-primary">TRENDING MOVIES</p>
+                        <p class="lable-secondary link">BROWSE ALL MOVIES</p>
+                    </div>
+                    <div class="movie-cards">
+                        <div class="card">
+                            <img src="{% static 'img/movie_1.jpg' %}" alt="movie"">
+                            <div class="name lable-secondary">Gost Busters</div>
+                        </div>
+                        <div class="card">
+                            <img src="{% static 'img/movie_2.jpg' %}" alt="movie">
+                            <div class="name lable-secondary">F8</div>
+                        </div>
+                        <div class="card">
+                            <img src="{% static 'img/movie_3.jpg' %}" alt="movie">
+                            <div class="name lable-secondary">Murder On Nile</div>
+                        </div>
+                        <div class="card">
+                            <img src="{% static 'img/movie_4.jpg' %}" alt="movie">
+                            <div class="name lable-secondary">No Time To Die</div>
+                        </div>
+                        <div class="card">
+                            <img src="{% static 'img/movie_5.jpg' %}" alt="movie">
+                            <div class="name lable-secondary">Black Widow</div>
+                        </div>
+                        <div class="card"> 
+                            <img src="{% static 'img/movie_6.jpg' %}" alt="movie">
+                            <div class="name lable-secondary">Free Guy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

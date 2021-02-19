@@ -1,0 +1,64 @@
+/** Navbar--------------------------------------------------------- */
+.register
+{
+    display: none;
+}
+
+.login
+{
+    margin-right: 0.5rem;
+}
+/* --------------------------------------------------------- */
+
+/** Background--------------------------------------------------------- */
+body
+{
+    background: linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/ForegroundGredient.png), url(../img/Background_2.png), var(--dark-color);
+    background: url(../img/ForegroundGredient.png), url(../img/Background_2.png), var(--dark-color);
+    background-size: cover, cover, 200%, 200%;
+    background-position: top center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+/* --------------------------------------------------------- */
+
+/** Utility-------------------------------------------------------------- */
+@media(max-width: 400px)
+{
+    .container
+    {
+        padding: 0;
+    }
+}
+
+.heading-1
+{
+    font-size: 40px;
+    line-height: 1;
+}
+
+.text-input
+{
+    width: 280px;
+}
+
+.container
+{
+    padding: 0;
+}
+/* -------------------------------------------------------------- */
+
+/** Login-------------------------------------------------------------- */
+.login-container
+{
+    margin: 5rem auto;
+    height: 100%
+}
+
+@media(max-width: 400px)
+{
+    .login-container
+    {
+        margin: 2rem auto;
+    }
+}

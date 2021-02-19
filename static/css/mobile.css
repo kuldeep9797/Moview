@@ -1,0 +1,68 @@
+/** Navbar--------------------------------------------------------- */
+.register
+{
+    display: none;
+}
+/* --------------------------------------------------------- */
+
+/** Background--------------------------------------------------------- */
+body
+{
+    background: linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/ForegroundGredient.png), url(../img/Background_2.png), var(--dark-color);
+    background-size: cover, cover, 200%, 200%;
+    background-position: top center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+/* --------------------------------------------------------- */
+
+/** Utility-------------------------------------------------------------- */
+@media(max-width: 400px)
+{
+    .container
+    {
+        padding: 0 0.5rem;
+    }
+}
+
+.heading-1
+{
+    font-size: 30px;
+    line-height: 1;
+}
+/* -------------------------------------------------------------- */
+
+.header > .main > .left
+{
+    margin-left: 0;
+}
+
+.card
+{
+    margin: 0.5rem 0rem;
+}
+
+@media(max-width: 400px)
+{
+    .card
+    {
+        margin: 0 0.3rem;
+    }
+
+    .card > img
+    {
+        width: 150px;
+    }
+
+    .header > .trending > .content > .movie-cards
+    {
+        justify-content: center;
+    }
+}
+
+
+
+.header > .trending > .content > .movie-cards > .card:last-child
+{
+    display: block;
+}

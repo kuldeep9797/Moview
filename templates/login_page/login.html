@@ -88,7 +88,26 @@
             }
             else
             {
-                // TODO  add message for the form validation error
+                let emailValid = document.getElementById('email').checkValidity();
+                let passwordValid = document.getElementById('password').checkValidity();
+
+                if (emailValid == false)
+                {
+                    document.getElementById('email').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('email').classList.remove('text-error');
+                }
+
+                if (passwordValid == false)
+                {
+                    document.getElementById('password').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('password').classList.remove('text-error');
+                }
             }
         }
     </script>

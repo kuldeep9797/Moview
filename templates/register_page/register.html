@@ -94,7 +94,36 @@
             }
             else
             {
-                // TODO  add message for the form validation error
+                let usenameValid = document.getElementById('username').checkValidity();
+                let emailValid = document.getElementById('email').checkValidity();
+                let passwordValid = document.getElementById('password').checkValidity();
+
+                if (usenameValid == false)
+                {
+                    document.getElementById('username').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('username').classList.remove('text-error');
+                }
+
+                if (emailValid == false)
+                {
+                    document.getElementById('email').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('email').classList.remove('text-error');
+                }
+
+                if (passwordValid == false)
+                {
+                    document.getElementById('password').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('password').classList.remove('text-error');
+                }
             }
         }
     </script>

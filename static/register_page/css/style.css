@@ -184,6 +184,11 @@ ul
     margin-bottom: 1rem;
 }
 
+.text-error
+{
+    background: var(--darker-red-color);
+}
+
 .text-input:focus
 {
     border-width: 1px;

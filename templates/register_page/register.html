@@ -34,8 +34,17 @@
                 <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
             </div>
             <div class="login-register">
-                <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
-                <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                {% if user.is_authenticated %}
+                    <a href="#" class="btn btn-primary">DASHBOARD</a>
+                    <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary">LOGOUT</a>
+                    <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">LOGIN</a>
+                    <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                {% endif %}
             </div>
         </nav>
     </div>

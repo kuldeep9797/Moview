@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +15,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
 
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="CSS/tablet.css" media="screen and (max-width: 600px)">
-    <link rel="stylesheet" href="CSS/mobile.css" media="screen and (max-width: 500px)">
+    <link rel="stylesheet" href="{% static 'register_page/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'register_page/css/tablet.css' %}" media="screen and (max-width: 600px)">
+    <link rel="stylesheet" href="{% static 'register_page/css/mobile.css' %}" media="screen and (max-width: 500px)">
 
     <!-- title -->
     <title>Moview - Register</title>
@@ -26,11 +31,11 @@
     <div class="container">
         <nav>
             <div class="logo">
-                <a href="../index.html"><img src="img/Logo.svg" alt="Moview"></a>
+                <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
             </div>
             <div class="login-register">
-                <a href="../Login_page/login.html" class="btn btn-primary login">LOGIN</a>
-                <a href="#" class="btn btn-secondary register">REGISTER</a>
+                <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
             </div>
         </nav>
     </div>
@@ -40,7 +45,8 @@
     <div class="container">
         <div class="register-container">
             <p class="heading-1">Register</p>
-            <form action="#">
+            <form action="{% url 'register_process' %}" id="register"  method="POST">
+                {% csrf_token %}
                 <div class="username-input">
                     <p class="lable-primary">Username</p>
                     <input type="text" name="username" id="username" class="text-input">
@@ -58,8 +64,21 @@
                     <span class="lable-secondary">Agree to t&c.</span>
                 </div>
             </form>
-            <a href="#" class="btn btn-primary">REGISTER</a>
-            <p class="lable-secondary" >Already have account? <a href="../Login_page/login.html" class="link">Login here</a></p>
+            <a href="javascript:{document.getElementById('register').submit()}" class="btn btn-primary">REGISTER</a>
+            <p class="lable-secondary" >Already have account? <a href="{% url 'login' %}" class="link">Login here</a></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="container">
+        <div class="footer">
+            <div class="about">
+                <a href="#" class="btn btn-secondary lable-primary">About us</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+            <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
         </div>
     </div>
 </body>

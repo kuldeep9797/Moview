@@ -247,3 +247,26 @@ nav > .logo > a > img
 {
     margin-bottom: 1rem;
 }
+
+
+/** Footer------------------------------------------------------------- */
+.footer
+{
+    background: var(--dark-color);
+    padding: 0.5rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer > .about
+{
+    text-align: center;
+}
+
+.footer > p
+{
+    margin-top: 0.5rem;
+}

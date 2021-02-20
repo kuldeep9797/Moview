@@ -49,17 +49,17 @@
                 {% csrf_token %}
                 <div class="email-input">
                     <p class="lable-primary">Email</p>
-                    <input type="email" name="email" id="email" class="text-input">
+                    <input type="email" name="email" id="email" class="text-input" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autocomplete="off" required>
                 </div>
                 <div class="password-input">
                     <p class="lable-primary">Password</p>
-                    <input type="password" name="password" id="password" class="text-input">
+                    <input type="password" name="password" id="password" class="text-input" minlength="8" maxlength="12" title="Min 8 characters and Max 12 characters" required>
                 </div>
                 <div class="forgetPassword-input">
                     <a href="#"><p class="lable-secondary link">Forgot your password?</p></a>
                 </div>
             </form>
-            <a href="javascript:{document.getElementById('login').submit()}" class="btn btn-primary">LOGIN</a>
+            <a href="javascript:{submit_form()}" class="btn btn-primary">LOGIN</a>
             <p class="lable-secondary" >Don't have account? <a href="{% url 'register' %}" class="link">Register here</a></p>
         </div>
     </div>
@@ -68,7 +68,7 @@
     <div class="container">
         <div class="footer">
             <div class="about">
-                <a href="#" class="btn btn-secondary lable-primary">About us</a>
+                <a href="{% url 'about' %}" class="btn btn-secondary lable-primary">About us</a>
                 <a href="#" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
                 <a href="#" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
                 <a href="#" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
@@ -76,5 +76,21 @@
             <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
         </div>
     </div>
+
+    <script>
+        function submit_form()
+        {
+            let formValid = document.getElementById('login').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('login').submit();
+            }
+            else
+            {
+                // TODO  add message for the form validation error
+            }
+        }
+    </script>
 </body>
 </html>

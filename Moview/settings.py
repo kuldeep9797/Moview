@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1','moview1.herokuapp.com','20.39.35.238','localhost']
 
 INSTALLED_APPS = [
     'pages.apps.PagesConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -4,9 +4,9 @@
     display: none;
 }
 
-.login
+.logout
 {
-    margin-right: 0.5rem;
+    display: none;
 }
 /* --------------------------------------------------------- */
 

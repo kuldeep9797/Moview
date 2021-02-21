@@ -1,0 +1,67 @@
+/** Navbar--------------------------------------------------------- */
+.register
+{
+    display: none;
+}
+
+.logout
+{
+    display: none;
+}
+/* --------------------------------------------------------- */
+
+/** Utility-------------------------------------------------------------- */
+@media(max-width: 400px)
+{
+    .container
+    {
+        padding: 0 0.5rem;
+    }
+}
+
+.heading-1
+{
+    font-size: 30px;
+    line-height: 1;
+}
+/* -------------------------------------------------------------- */
+
+/** About Info---------------------------------------------------------------- */
+.row
+{
+    flex-direction: column;
+}
+
+.text-info
+{
+    width: auto;
+    margin-right: 0;
+}
+
+/** Developer Team */
+.text-info > .about-team
+{
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-info > .lable-primary
+{
+    margin-top: 2rem;
+}
+
+.text-info > .about-team > .team-card
+{
+    margin: 0.5rem;
+    width: 80%;
+}
+/* ----------------- */
+
+/** Contact Us  */
+.contact-info
+{
+    margin-top: 2rem;
+}
+/* ---------------- */
+/* ---------------------------------------------------------------- */

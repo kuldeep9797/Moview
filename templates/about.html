@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your review to the world with the best movie commmunity">
+    <meta name="keywords" content="movie review ratings community">
+    <meta name="author" content="Bhardvaj, Kuldeep, Deep, Jenish, Shruti">
+
+    <!-- Google font: Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/about_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/about_mobile.css' %}" media="screen and (max-width: 600px)">
+
+    <!-- title -->
+    <title>Moview - About</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="hero-background">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
+                </div>
+                <div class="login-register">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-primary dashboard">DASHBOARD</a>
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
+                        <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                        <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <!-- End Navbar -->
+        <!-- Main-hero -->
+        <div class="hero">
+            <div class="container">
+                <h1 class="heading-1">About Us</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- About information -->
+    <div class="container">
+        <div class="row">
+            <div class="col text-info">
+                <div class="about-text">
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit, libero voluptatibus dolores perspiciatis corporis maxime cupiditate nesciunt inventore iure eos commodi at fuga ut totam a tempora! Et, enim. Est qui deserunt ipsum? Perspiciatis quae obcaecati voluptatibus, quis odit quidem? Blanditiis error eveniet nesciunt voluptas officia, unde eius tenetur itaque!</p>
+                </div>
+                <p class="lable-primary">Development Team</p>
+                <div class="about-team">
+                    <div class="team-card">
+                        <img src="{% static 'img/Bhardvaj.png' %}" alt="Bhardvaj">
+                        <p class="lable-secondary">Bhardvaj Lukhi</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="{% static 'img/Kuldeep.png' %}" alt="Kuldeep">
+                        <p class="lable-secondary">Kuldeep Padhiyar</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="{% static 'img/Shruti.png' %}" alt="Shruti">
+                        <p class="lable-secondary">Shruti Saini</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="{% static 'img/Darsh.png' %}" alt="Darsh">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="{% static 'img/Jenish.png' %}" alt="Jenish">
+                        <p class="lable-secondary">Jenish Patel</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col contact-info">
+                <p class="lable-primary">Contact Us</p>
+                <div class="email-info">
+                    <p class="lable-secondary"><i class="fas fa-envelope"></i> moview@gmail.com</p>
+                </div>
+                <a href="http://www.twitter.com/" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="http://www.instagram.com/" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="https://www.youtube.com/" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

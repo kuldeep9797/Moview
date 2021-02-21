@@ -35,14 +35,14 @@
             </div>
             <div class="login-register">
                 {% if user.is_authenticated %}
-                    <a href="#" class="btn btn-primary">DASHBOARD</a>
-                    <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary">LOGOUT</a>
+                    <a href="#" class="btn btn-primary dashboard">DASHBOARD</a>
+                    <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
                     <form action="{% url 'logout_process' %}" id="logout" method="POST">
                         {% csrf_token %}
                         <input type="hidden">
                     </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-primary">LOGIN</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
                     <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
                 {% endif %}
             </div>

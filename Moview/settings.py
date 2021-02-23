@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['127.0.0.1','moview1.herokuapp.com','20.39.35.238','localhost']
 INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'accounts.apps.AccountsConfig',
+    'movie.apps.MovieConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,13 +78,13 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'moviewdb',
-        'USER': 'moviewuser',
-        'PASSWORD': '1234',
-        'HOST': 'localhost'
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'moviewdb',
+    #     'USER': 'moviewuser',
+    #     'PASSWORD': '1234',
+    #     'HOST': 'localhost'
+    # }
 }
 
 

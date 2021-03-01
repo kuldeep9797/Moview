@@ -204,7 +204,7 @@ nav > .logo > a > img
     text-align: left;
 }
 
-.header > .trending > .content > .trending-head> p:last-child
+.header > .trending > .content > .trending-head> a:last-child
 {
     text-align: right;
 }

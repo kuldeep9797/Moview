@@ -3,6 +3,8 @@ from .models import Movie, Review
 from django.http import Http404
 from django.db.models import Avg
 
+from .options import genre_choices, year_choices
+
 
 def movie(request, movie_id):
     # *lsit of user who are friend with the user, who logged in, and have this movie in favorite list
@@ -37,5 +39,50 @@ def movie(request, movie_id):
     return render(request, 'movie_page/movie_page.html', context)
 
 
+# TODO Add logic for the add_review method
+# TODO-------------------------------------------------------
 def add_review(request):
+    # If the review from the user exist then update it
+    # Otherwise create the new review entry
+    # Movie id is in the post request so you can access it with 'request.POST.get('movie_id')' and user is logged in
+
     return redirect('movie', movie_id = request.POST.get('movie_id'))
+
+
+# TODO data for browse page
+# TODO-------------------------------------------------------
+def browse(request):
+    movies = Movie.objects.all()
+
+    trending_movies = movies
+    upcoming_movies = movies
+    theater_movies = movies
+
+    context = {
+        'genre_choices': genre_choices,
+        'year_choices': year_choices,
+        'trending_movies': trending_movies,
+        'upcoming_movies': upcoming_movies,
+        'theater_movies': theater_movies,
+    }
+    return render(request, 'browse_page/browse_page.html', context)
+
+
+# TODO search result data
+# TODO-------------------------------------------------------
+def browse_result(request):
+    movies = Movie.objects.all()
+
+    if (movies.count() == 0):
+        has_results = False
+    else:
+        has_results = True
+
+    context = {
+        'genre_choices': genre_choices,
+        'year_choices': year_choices,
+        'has_results': has_results,
+        'movies': movies,
+        'get_request': request.GET,
+    }
+    return render(request, 'browse_page/browse_result.html', context)

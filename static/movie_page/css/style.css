@@ -3,6 +3,7 @@
     --max-width: 1250px;
     --dark-color: #222222;
     --darker-dark-color: #1A1A1A;
+    --darker-red-color: #260D0D;
     --light-color: #f2f2f2;
     --button-disabled-color: #996666;
     --button-primary-color: #F53D3D;
@@ -223,6 +224,11 @@ ul
     padding: 0 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
+}
+
+.text-error
+{
+    background-color: var(--darker-red-color);
 }
 
 textarea.text-input

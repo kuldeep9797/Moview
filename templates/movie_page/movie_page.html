@@ -52,7 +52,7 @@
 
         <!-- Main-hero -->
         <div class="hero">
-            <img src="{% static 'movie_page/img/black-widow-poster-slice.jpg' %}" alt="Cover Image">
+            <img src="{{ movie.cover_photo.url }}" alt="Cover Image">
         </div>
     </div>
 
@@ -61,16 +61,36 @@
         <div class="movie-title">
             <div class="row">
                 <div class="card col">
-                    <img src="{% static 'movie_page/img/movie_5.jpg' %}" alt="movie">
+                    <img src="{{ movie.poster.url }}" alt="movie">
                 </div>
                 <div class="title col">
                     <div class="movie-rating">
-                        <i class="fas fa-star star star-active"></i>
-                        <i class="fas fa-star star star-active"></i>
-                        <i class="fas fa-star star star-active"></i>
-                        <i class="fas fa-star star"></i>
-                        <i class="fas fa-star star"></i>
-                        <p class="lable-secondary"> {{ rating_avg }}/5 viewer rating - 35 user </p>
+                        {% if rating_avg >= 1 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 2 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 3 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 4 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 5 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        <p class="lable-secondary"> {{ rating_avg }}/5 viewer rating - {{ review_count }} users </p>
                     </div>
                     <h1 class="heading-1">{{ movie.name }}</h1>
                 </div>
@@ -88,13 +108,25 @@
                     <p class="lable-primary">Story: <span class="lable-secondary">{{ movie.description}}</span></p>
                 </div>
                 <div class="col option">
-                    <a href="#" class="btn btn-secondary">Add to watched list</a>
-                    <!--! If user have this movie in the watched list -->
-                    <!-- <a href="#" class="btn btn-secondary">Remove from watched list</a> -->
+                    {% if user.is_authenticated %}
+                        {% if not watch_listed %}
+                            <a href="#" class="btn btn-secondary">Add to watched list</a>
+                        {% else %}
+                            <!--! If user have this movie in the watched list -->
+                            <a href="#" class="btn btn-secondary">Remove from watched list</a>
+                        {% endif %}
 
-                    <a href="#" class="btn btn-primary">Add to favorite</a>
-                    <!--! If user have this movie in the favorite list -->
-                    <!-- <a href="#" class="btn btn-primary">Remove from favorite</a> -->
+                        {% if not favorited %}
+                            <a href="#" class="btn btn-primary">Add to favorite</a>
+                        {% else %}
+                            <!--! If user have this movie in the favorite list -->
+                            <a href="#" class="btn btn-primary">Remove from favorite</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-secondary">Add to watched list</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary">Add to favorite</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -113,189 +145,98 @@
                     <div class="review-title">
                         <p class="lable-primary">Reviews</p>
 
-                        <p class="btn btn-primary" id="review-modal-open">Add your review</p>
-                        <!--! If user already have post a review for movie -->
-                        <!-- <a href="#" class="btn btn-primary">Edit your review</a> -->
+                        {% if user.is_authenticated %}
+                            {% if not user_given_review %}
+                                <p class="btn btn-primary" id="review-modal-open">Add your review</p>
+                            {% else %}
+                                <!--! If user already have post a review for movie -->
+                                <p class="btn btn-primary" id="review-modal-open">Edit your review</p>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary" id="review-modal-open">Add your review</a>
+                        {% endif %}
+
                     </div>
-                    <div class="review-comment your-review">
-                        <p class="lable-primary">Your review</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
+                    {% if user_given_review %}
+                        <div class="review-comment your-review">
+                            <p class="lable-primary">Your review</p>
+                            <div class="movie-rating">
+                                {% if user_review.rating >= 1 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 2 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 3 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 4 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 5 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                            </div>
+                            <p class="text">{{ user_review.comment }}</p>
                         </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
-                    <div class="review-comment">
-                        <p class="lable-primary">Username</p>
-                        <div class="movie-rating">
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small star-active"></i>
-                            <i class="fas fa-star star-small"></i>
-                            <i class="fas fa-star star-small"></i>
-                        </div>
-                        <p class="text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis est corporis saepe quam eos quia ea veritatis quibusdam? Ipsum autem possimus impedit aut sed architecto numquam quisquam ratione laborum eaque corrupti obcaecati repudiandae consequuntur dolore iure aspernatur dignissimos, facilis quo quibusdam maxime! Omnis autem natus laboriosam sequi adipisci nesciunt fugiat.</p>
-                    </div>
+                    {% endif %}
+
+                    {% if reviews %}
+                        {% for review in reviews %}
+                            {% if user == review.user %}
+                            {% else %}
+                                <div class="review-comment">
+                                    <p class="lable-primary">{{ review.user }}</p>
+                                    <div class="movie-rating">
+                                        {% if review.rating >= 1 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 2 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 3 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 4 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 5 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text">{{ review.comment }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
                 </div>
                 <div class="col friend">
-                    <p class="btn btn-primary" id="suggest-modal-open">Suggest movie</p>
+                    {% if user.is_authenticated %}
+                        <p class="btn btn-primary" id="suggest-modal-open">Suggest movie</p>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary" id="suggest-modal-open">Suggest movie</a>
+                    {% endif %}
                     <p class="lable-primary">Friends favorite movie</p>
                     <div class="firend-list scroll-bar">
                         <div class="friend-card">
@@ -400,7 +341,8 @@
     <div class="review-modal-container hidden" id="review-modal">
         <p class="heading-1">Your review</p>
         <div class="review-modal">
-            <form action="#">
+            <form action="{% url 'add_review' %}" id="review_form" method="POST">
+                {% csrf_token %}
                 <div class="rating-input">
                     <p class="lable-primary">Ratings</p>
                     <div class="movie-rating">
@@ -420,10 +362,11 @@
                     <p class="lable-primary">Review</p>
                     <textarea name="review" id="review" class="text-input scroll-bar" placeholder="Write your review here." minlength="5" title="Write minimum of 5 character" required></textarea>
                 </div>
+                <input type="hidden" name="movie_id" value="{{ movie.id }}"">
             </form>
             <div class="action-button">
                 <p class="btn btn-secondary" id="review-modal-close">Cancel</p>
-                <a href="#" class="btn btn-primary">Submit</a>
+                <a href="javascript:{submit_review()}" class="btn btn-primary">Submit</a>
             </div>
         </div>
     </div>
@@ -532,6 +475,31 @@
         suggest_modal_open.addEventListener('click', open_suggest_modal);
         suggest_overlay.addEventListener('click', close_suggest_modal);
         suggest_modal_close.addEventListener('click', close_suggest_modal);
+
+
+        // Submit the review with rating
+        function submit_review()
+        {
+            let formValid = document.getElementById('review_form').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('review_form').submit();
+            }
+            else
+            {
+                let reviewValid = document.getElementById('review').checkValidity();
+
+                if (reviewValid == false)
+                {
+                    document.getElementById('review').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('review').classList.remove('text-error');
+                }
+            }
+        }
 
     </script>
 </body>

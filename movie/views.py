@@ -5,7 +5,6 @@ from django.db.models import Avg
 
 
 def movie(request, movie_id):
-    # *review from the review table where user is who logged in
     # *lsit of user who are friend with the user, who logged in, and have this movie in favorite list
     try:
         movie = Movie.objects.get(id=movie_id)
@@ -13,17 +12,15 @@ def movie(request, movie_id):
         avg_rating = Review.objects.filter(movie_id=movie_id).aggregate(Avg("rating"))
         if (reviews.count() == 0):
             avg_rating = {'rating__avg': 0}
-
         user_review = ['None']
         user_given_review = False
         if (request.user.is_authenticated):
             user_review = Review.objects.filter(user=request.user, movie_id=movie_id)
             if (user_review.count() == 0):
                 user_given_review = False
+                user_review = ['None']
             else:
                 user_given_review = True
-
-        print(user_review)
 
         context = {
             'movie': movie,

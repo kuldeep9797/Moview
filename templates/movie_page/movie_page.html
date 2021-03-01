@@ -366,7 +366,11 @@
             </form>
             <div class="action-button">
                 <p class="btn btn-secondary" id="review-modal-close">Cancel</p>
-                <a href="javascript:{submit_review()}" class="btn btn-primary">Submit</a>
+                {% if user_given_review %}
+                    <a href="javascript:{submit_review()}" class="btn btn-primary">Update</a>
+                {% else %}
+                    <a href="javascript:{submit_review()}" class="btn btn-primary">Submit</a>
+                {% endif %}
             </div>
         </div>
     </div>

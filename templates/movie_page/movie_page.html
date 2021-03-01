@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{% static 'movie_page/css/mobile.css' %}" media="screen and (max-width: 600px)">
 
     <!-- title -->
-    <title>Moview - movie title (Black Widow)</title>
+    <title>Moview - {{ movie.name }}</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -70,9 +70,9 @@
                         <i class="fas fa-star star star-active"></i>
                         <i class="fas fa-star star"></i>
                         <i class="fas fa-star star"></i>
-                        <p class="lable-secondary">3/5 viewer rating - 35 user</p>
+                        <p class="lable-secondary">{{ rating_avg }}/5 viewer rating - 35 user</p>
                     </div>
-                    <h1 class="heading-1">Black Widow</h1>
+                    <h1 class="heading-1">{{ movie.name }}</h1>
                 </div>
             </div>
         </div>
@@ -83,9 +83,9 @@
         <div class="movie-info">
             <div class="row">
                 <div class="col info">
-                    <p class="lable-primary">Release Year: <span class="lable-secondary">2020</span></p>
+                    <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
                     <p class="lable-primary">Genre: <span class="lable-secondary">Action, Sci-fi,</span></p>
-                    <p class="lable-primary">Story: <span class="lable-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam dolor consectetur, tempore ipsam laboriosam molestias doloremque earum commodi quia nemo error? Cumque esse omnis, placeat dolorem aut quasi. Fugiat, similique.</span></p>
+                    <p class="lable-primary">Story: <span class="lable-secondary">{{ movie.description}}</span></p>
                 </div>
                 <div class="col option">
                     <a href="#" class="btn btn-secondary">Add to watched list</a>

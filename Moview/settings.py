@@ -78,13 +78,13 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'moviewdb',
-    #     'USER': 'moviewuser',
-    #     'PASSWORD': '1234',
-    #     'HOST': 'localhost'
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'moviewdb',
+        'USER': 'moviewuser',
+        'PASSWORD': '1234',
+        'HOST': 'localhost'
+    }
 }
 
 
@@ -131,3 +131,7 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media Folder Settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

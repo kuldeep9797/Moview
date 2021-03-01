@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 import datetime
 from django.db.models import Avg
+
 # *MOVIE TABLE
 # *movie_id (int)  - I think this is the automatically generated with django so no need to add in the model class
 # *movie_title (string)
@@ -24,13 +25,6 @@ class Movie(models.Model):
     # avg_rating = models.FloatField(blank=True)
     release_year = models.IntegerField('year', choices=[(r,r) for r in range(1900, datetime.date.today().year+3)], default=current_year)
 
-
-# *REVIEW TABLE
-# *rating_id (int)  - I think this is the automatically generated with django so no need add in the model class
-# *movie_id (int)
-# *user_id (int)
-# *rating (int between 1 to 5)  - this will be user specific rating
-# *comment (string)
 
 class Review(models.Model):
     rating = models.FloatField()

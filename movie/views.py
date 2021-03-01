@@ -3,8 +3,6 @@ from .models import Movie, Review
 from django.http import Http404
 from django.db.models import Avg
 
-# def movie(request):
-#     return render(request, 'movie_page/movie_page.html')
 
 def movie(request, movie_id):
 
@@ -22,7 +20,7 @@ def movie(request, movie_id):
         context = {
             'movie': movie,
             'reviews': reviews,
-            'rating_avg': avg_rating
+            'rating_avg': avg_rating,
         }
     except Movie.DoesNotExist:
         raise Http404('Movie not found')

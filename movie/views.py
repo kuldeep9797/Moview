@@ -1,19 +1,24 @@
 from django.shortcuts import render, redirect
-from .models import Movie, Review
 from django.http import Http404
 from django.db.models import Avg
+from django.contrib.auth.models import User
 
+from .models import Movie, Review
 from .options import genre_choices, year_choices
+from accounts.models import WatchList, FavoriteList
 
-
+# movie page data
+# -------------------------------------------------------
 def movie(request, movie_id):
     # *lsit of user who are friend with the user, who logged in, and have this movie in favorite list
     try:
         movie = Movie.objects.get(id=movie_id)
         reviews = Review.objects.filter(movie_id=movie_id)
+
         avg_rating = Review.objects.filter(movie_id=movie_id).aggregate(Avg("rating"))
         if (reviews.count() == 0):
             avg_rating = {'rating__avg': 0}
+        
         user_review = ['None']
         user_given_review = False
         if (request.user.is_authenticated):
@@ -23,44 +28,97 @@ def movie(request, movie_id):
                 user_review = ['None']
             else:
                 user_given_review = True
+        
+        watch_listed = False
+        if (WatchList.objects.filter(user=request.user, movie_id=movie).exists()):
+            watch_listed = True
+        else:
+            watch_listed = False
+
+        favorited = False
+        if (FavoriteList.objects.filter(user=request.user, movie_id=movie).exists()):
+            favorited = True
+        else:
+            favorited = False
 
         context = {
             'movie': movie,
             'reviews': reviews,
-            'rating_avg': avg_rating['rating__avg'],
+            'rating_avg': round(avg_rating['rating__avg'], 1),
             'review_count': reviews.count(),
-            'watch_listed': False,
-            'favorited': False,
+            'watch_listed': watch_listed,
+            'favorited': favorited,
             'user_review': user_review[0],
             'user_given_review': user_given_review,
+            'genre_choices': genre_choices,
         }
     except Movie.DoesNotExist:
         raise Http404('Movie not found')
     return render(request, 'movie_page/movie_page.html', context)
 
 
-# TODO Add logic for the add_review method
-# TODO-------------------------------------------------------
+# add_review method
+# -------------------------------------------------------
 def add_review(request):
-    # If the review from the user exist then update it
-    # Otherwise create the new review entry
-    # Movie id is in the post request so you can access it with 'request.POST.get('movie_id')' and user is logged in
     movie = request.POST.get('movie_id')
     user_id = request.user.id
     rating = request.POST.get('rating')
-    review = request.POST.get('review')
+    review_text = request.POST.get('review')
+
     # Getting movie and user
-    movie_db = Movie.objects.get(movie)
-    user_db = User.objects.get(user_id)
-    try:
-        review = Review.objects.get(movie_id = movie, user_id = user_id)
+    movie_db = Movie.objects.get(id=movie)
+    user_db = User.objects.get(id=user_id)
+
+    if (Review.objects.filter(movie_id = movie, user = user_id).exists()):
+        review = Review.objects.get(movie_id = movie, user = user_id)
+        print("Review Exists: " ,review)
         review.rating = rating
-        review.comment = review
+        review.comment = review_text
         review.save()
-    except:
-        new_review = Review(user_id = user_db, rating = rating, comment=review, movie_id = movie_db)
+    else:
+        new_review = Review(user = user_db, rating = rating, comment=review_text, movie_id = movie_db)
         new_review.save()
-    print(movie, user_id, rating, review)
+    
+    return redirect('movie', movie_id = request.POST.get('movie_id'))
+
+
+# TODO add/remove form watched list
+# TODO-------------------------------------------------------
+def add_remove_watch(request):
+    movie = request.POST.get('movie_id')
+    user_id = request.user.id
+
+    movie_db = Movie.objects.get(id=movie)
+    user_db = User.objects.get(id=user_id)
+
+    print("Add to watched list")
+
+    if (WatchList.objects.filter(movie_id = movie, user = user_id).exists()):
+        WatchList.objects.filter(movie_id = movie, user = user_id).delete()
+    else:
+        new_addition = WatchList(user = user_db, movie_id = movie_db)
+        new_addition.save()
+    
+    return redirect('movie', movie_id = request.POST.get('movie_id'))
+
+
+# TODO add/remove form watched list
+# TODO-------------------------------------------------------
+def add_remove_favorite(request):
+    movie = request.POST.get('movie_id')
+    user_id = request.user.id
+
+    movie_db = Movie.objects.get(id=movie)
+    user_db = User.objects.get(id=user_id)
+
+    print("Add to favorite list")
+
+    if (FavoriteList.objects.filter(movie_id = movie, user = user_id).exists()):
+        FavoriteList.objects.filter(movie_id = movie, user = user_id).delete()
+    else:
+        new_addition = FavoriteList(user = user_db, movie_id = movie_db)
+        new_addition.save()
+    # Add logic
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 
 
@@ -83,8 +141,8 @@ def browse(request):
     return render(request, 'browse_page/browse_page.html', context)
 
 
-# TODO search result data
-# TODO-------------------------------------------------------
+# search result data
+#-------------------------------------------------------
 def browse_result(request):
     movies = Movie.objects.all()
 

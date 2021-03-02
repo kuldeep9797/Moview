@@ -36,11 +36,11 @@ genre_choices = {
     'thriller': 'Thriller',
     'war': 'War',
     'crime': 'Crime',
-    'documentry': 'Documentry',
+    'documentary': 'Documentary',
     'drama': 'Drama',
     'fantasy': 'Fantasy',
     'horror': 'Horror',
-    'sci_fi': 'Sci-fi',
+    'sci-fi': 'Sci-fi',
     'musical': 'Musical',
     'mystery': 'Mystery',
 }

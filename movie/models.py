@@ -37,7 +37,7 @@ class Review(models.Model):
     movie_id = models.ForeignKey(to=Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)  
     def __str__(self):
-        return self.user.username + self.movie_id.name  
+        return self.user.username + "/" + self.movie_id.name
 
 #     @classmethod
 #     def post_create(cls, sender, instance, created, *args, **kwargs):

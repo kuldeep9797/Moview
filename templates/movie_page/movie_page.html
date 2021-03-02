@@ -98,29 +98,48 @@
         </div>
     </div>
 
+    <!-- Watched list movie list form -->
+    <form action="{% url 'add_remove_watch' %}" id="watch_list" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+    </form>
+    <!-- Favorite movie list form -->
+    <form action="add_remove_favorite" id="favorite_list" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+    </form>
+
     <!-- Movie Information -->
     <div class="container">
         <div class="movie-info">
             <div class="row">
                 <div class="col info">
                     <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
-                    <p class="lable-primary">Genre: <span class="lable-secondary">Action, Sci-fi,</span></p>
+                    <p class="lable-primary">Genre: <span class="lable-secondary">
+                        {% for genre in movie.gerne_ids.all %}
+                            {% for key,value in genre_choices.items %}
+                                {% if key == genre.name %}
+                                    {{value}},
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </span></p>
                     <p class="lable-primary">Story: <span class="lable-secondary">{{ movie.description}}</span></p>
                 </div>
                 <div class="col option">
                     {% if user.is_authenticated %}
                         {% if not watch_listed %}
-                            <a href="#" class="btn btn-secondary">Add to watched list</a>
+                            <a href="javascript:{submit_watch()}" class="btn btn-secondary">Add to watched list</a>
                         {% else %}
                             <!--! If user have this movie in the watched list -->
-                            <a href="#" class="btn btn-secondary">Remove from watched list</a>
+                            <a href="javascript:{submit_watch()}" class="btn btn-secondary">Remove from watched list</a>
                         {% endif %}
 
                         {% if not favorited %}
-                            <a href="#" class="btn btn-primary">Add to favorite</a>
+                            <a href="javascript:{submit_favorite()}" class="btn btn-primary">Add to favorite</a>
                         {% else %}
                             <!--! If user have this movie in the favorite list -->
-                            <a href="#" class="btn btn-primary">Remove from favorite</a>
+                            <a href="javascript:{submit_favorite()}" class="btn btn-primary">Remove from favorite</a>
                         {% endif %}
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-secondary">Add to watched list</a>
@@ -362,7 +381,7 @@
                     <p class="lable-primary">Review</p>
                     <textarea name="review" id="review" class="text-input scroll-bar" placeholder="Write your review here." minlength="5" title="Write minimum of 5 character" required></textarea>
                 </div>
-                <input type="hidden" name="movie_id" value="{{ movie.id }}"">
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
             </form>
             <div class="action-button">
                 <p class="btn btn-secondary" id="review-modal-close">Cancel</p>
@@ -502,6 +521,26 @@
                 {
                     document.getElementById('review').classList.remove('text-error');
                 }
+            }
+        }
+
+        // Add/remove watched list
+        function submit_watch()
+        {
+            let formValid = document.getElementById('watch_list').checkValidity();
+            if (formValid == true)
+            {
+                document.getElementById('watch_list').submit();
+            }
+        }
+
+        // Add/remove favorite list
+        function submit_favorite()
+        {
+            let formValid = document.getElementById('favorite_list').checkValidity();
+            if (formValid == true)
+            {
+                document.getElementById('favorite_list').submit();
             }
         }
 

@@ -45,7 +45,22 @@ def add_review(request):
     # If the review from the user exist then update it
     # Otherwise create the new review entry
     # Movie id is in the post request so you can access it with 'request.POST.get('movie_id')' and user is logged in
-
+    movie = request.POST.get('movie_id')
+    user_id = request.user.id
+    rating = request.POST.get('rating')
+    review = request.POST.get('review')
+    # Getting movie and user
+    movie_db = Movie.objects.get(movie)
+    user_db = User.objects.get(user_id)
+    try:
+        review = Review.objects.get(movie_id = movie, user_id = user_id)
+        review.rating = rating
+        review.comment = review
+        review.save()
+    except:
+        new_review = Review(user_id = user_db, rating = rating, comment=review, movie_id = movie_db)
+        new_review.save()
+    print(movie, user_id, rating, review)
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 
 
@@ -77,6 +92,35 @@ def browse_result(request):
         has_results = False
     else:
         has_results = True
+
+    # Name
+    if 'name' in request.GET:
+        name = request.GET['name']
+        if name:
+            movies = movies.filter(name__icontains=name)
+
+    # Year
+    if 'years' in request.GET:
+        year = request.GET['years']
+        if year:
+            movies = movies.filter(release_year =year)
+
+    # genres
+    if 'genres' in request.GET:
+        genre = request.GET['genres']
+        # print(genre)
+        if genre:
+            filtered_movies = []
+            for movie in movies:
+                id, gernes = movie.id,movie.gerne_ids.all()
+                for rec in gernes:
+                    print(id)
+                    print(rec.name)
+                    print(genre)
+                    if rec.name.lower() == genre:
+                        filtered_movies.append(id)
+            movies = movies.filter(pk__in=filtered_movies)
+            print(filtered_movies)
 
     context = {
         'genre_choices': genre_choices,

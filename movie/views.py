@@ -30,16 +30,18 @@ def movie(request, movie_id):
                 user_given_review = True
         
         watch_listed = False
-        if (WatchList.objects.filter(user=request.user, movie_id=movie).exists()):
-            watch_listed = True
-        else:
-            watch_listed = False
+        if (request.user.is_authenticated):
+            if (WatchList.objects.filter(user=request.user, movie_id=movie).exists()):
+                watch_listed = True
+            else:
+                watch_listed = False
 
         favorited = False
-        if (FavoriteList.objects.filter(user=request.user, movie_id=movie).exists()):
-            favorited = True
-        else:
-            favorited = False
+        if (request.user.is_authenticated):
+            if (FavoriteList.objects.filter(user=request.user, movie_id=movie).exists()):
+                favorited = True
+            else:
+                favorited = False
 
         context = {
             'movie': movie,

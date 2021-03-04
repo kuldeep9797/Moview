@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['127.0.0.1','moview1.herokuapp.com','20.39.35.238','localhost']
 INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'accounts.apps.AccountsConfig',
+    'movie.apps.MovieConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,6 +85,13 @@ DATABASES = {
         'PASSWORD': '1234',
         'HOST': 'localhost'
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'moviewdb',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'root',
+    #     'HOST': 'localhost'
+    # }
 }
 
 
@@ -130,3 +138,7 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media Folder Settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

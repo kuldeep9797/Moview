@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +15,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
 
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="CSS/tablet.css" media="screen and (max-width: 600px)">
-    <link rel="stylesheet" href="CSS/mobile.css" media="screen and (max-width: 500px)">
+    <link rel="stylesheet" href="{% static 'register_page/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'register_page/css/tablet.css' %}" media="screen and (max-width: 600px)">
+    <link rel="stylesheet" href="{% static 'register_page/css/mobile.css' %}" media="screen and (max-width: 500px)">
 
     <!-- title -->
     <title>Moview - Register</title>
@@ -26,11 +31,20 @@
     <div class="container">
         <nav>
             <div class="logo">
-                <a href="../index.html"><img src="img/Logo.svg" alt="Moview"></a>
+                <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
             </div>
             <div class="login-register">
-                <a href="../Login_page/login.html" class="btn btn-primary login">LOGIN</a>
-                <a href="#" class="btn btn-secondary register">REGISTER</a>
+                {% if user.is_authenticated %}
+                    <a href="#" class="btn btn-primary dashboard">DASHBOARD</a>
+                    <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
+                    <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                    <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                {% endif %}
             </div>
         </nav>
     </div>
@@ -40,27 +54,87 @@
     <div class="container">
         <div class="register-container">
             <p class="heading-1">Register</p>
-            <form action="#">
+            <form action="{% url 'register_process' %}" id="register"  method="POST">
+                {% csrf_token %}
                 <div class="username-input">
                     <p class="lable-primary">Username</p>
-                    <input type="text" name="username" id="username" class="text-input">
+                    <input type="text" name="username" id="username" class="text-input" pattern="[a-zA-Z0-9].{2,}" title="Username shold be longer than 3 characters and no symbol" required>
                 </div>
                 <div class="email-input">
                     <p class="lable-primary">Email</p>
-                    <input type="email" name="email" id="email" class="text-input">
+                    <input type="email" name="email" id="email" class="text-input" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autocomplete="off" required/>
                 </div>
                 <div class="password-input">
                     <p class="lable-primary">Password</p>
-                    <input type="password" name="password" id="password" class="text-input">
+                    <!-- <input type="password" name="password" id="password" class="text-input" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g" title="At least 1 Uppercase, 1 Lowercase, 1 Number, 1 Symbol (!@#$%^&*_=+-), Min 8 characters and Max 12 characters" required/> -->
+                    <input type="password" name="password" id="password" class="text-input" minlength="8" maxlength="12" title="Min 8 characters and Max 12 characters" required/>
                 </div>
                 <div class="TC-input">
-                    <input type="checkbox" name="tc" id="tc" name="peripherals" value="true" class="check-box-input">
+                    <input type="checkbox" name="tc" id="tc" name="peripherals" value="true" class="check-box-input" required/>
                     <span class="lable-secondary">Agree to t&c.</span>
                 </div>
             </form>
-            <a href="#" class="btn btn-primary">REGISTER</a>
-            <p class="lable-secondary" >Already have account? <a href="../Login_page/login.html" class="link">Login here</a></p>
+            <a href="javascript: {submit_form()}" class="btn btn-primary">REGISTER</a>
+            <p class="lable-secondary" >Already have account? <a href="{% url 'login' %}" class="link">Login here</a></p>
         </div>
     </div>
+
+    <!-- Footer -->
+    <div class="container">
+        <div class="footer">
+            <div class="about">
+                <a href="{% url 'about' %}" class="btn btn-secondary lable-primary">About us</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+            <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
+        </div>
+    </div>
+
+    <script>
+        function submit_form()
+        {
+            let formValid = document.getElementById('register').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('register').submit();
+            }
+            else
+            {
+                let usenameValid = document.getElementById('username').checkValidity();
+                let emailValid = document.getElementById('email').checkValidity();
+                let passwordValid = document.getElementById('password').checkValidity();
+
+                if (usenameValid == false)
+                {
+                    document.getElementById('username').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('username').classList.remove('text-error');
+                }
+
+                if (emailValid == false)
+                {
+                    document.getElementById('email').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('email').classList.remove('text-error');
+                }
+
+                if (passwordValid == false)
+                {
+                    document.getElementById('password').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('password').classList.remove('text-error');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
     --button-hover-color: #E51A1A;
 }
 
-/* Reset */
+/** Reset */
 *
 {
     box-sizing: border-box;
@@ -23,7 +23,7 @@ body
     background: var(--dark-color);
 }
 
-/* Utility */
+/** Utility */
 .container
 {
     margin: auto;
@@ -39,8 +39,8 @@ a
 
 img
 {
-    width: 100%; 
-    display: inline-block;
+    max-width: 100%; 
+    display: block;
 }
 
 ul
@@ -143,18 +143,7 @@ ul
     padding: 0.5rem 0
 }
 
-/* ---------------------------------------------------------- */
-body
-{
-    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/Background_1.png), var(--dark-color);
-    background-size: cover;
-    background-position: top center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-}
-/* ---------------------------------------------------------- */
-
-/* Navbar------------------------------------------------------ */
+/** Navbar------------------------------------------------------ */
 nav
 {
     position: relative;
@@ -171,76 +160,102 @@ nav > .logo > a > img
 /* -------------------------------------------------------------- */
 
 
-/* Header------------------------------------------------------ */
-.header > .main
+/** Main Hero----------------------------------------------------------------- */
+.hero-background
 {
-    display: flex;
-    justify-content: space-between;
+    background: url("../img/about_background.png");
+    background-size: cover;
+    background-position: center;
 }
 
-.header > .main > .left
+.hero
 {
-    margin-top: 5rem;
+    padding-top: 5rem;
+    padding-bottom: 1px;
+}
+
+.hero > .container > .heading-1
+{
+    text-shadow: 1px 1px 0px var(--dark-color);
+}
+/* ----------------------------------------------------------------- */
+
+/** About Info---------------------------------------------------------------- */
+.row
+{
+    margin: 2rem 0;
+    display: flex;
+}
+
+.text-info
+{
+    width: 200%;
+    color: var(--light-color);
+    margin-right: 1rem;
+}
+
+.contact-info
+{
+    width: 100%;
+}
+
+.text-info > .lable-primary
+{
+    margin-bottom: 0.5rem;
+}
+
+.about-text
+{
+    margin-bottom: 1.5rem;
+}
+
+/** Developer Team */
+.text-info > .about-team
+{
+    display: flex;
+}
+
+.text-info > .about-team > .team-card
+{
+    width: 100%;
+    background-color: var(--button-primary-color);
+    margin-right: 1rem;
+}
+
+.text-info > .about-team > .team-card + .text-info > .about-team > .team-card
+{
+    margin-left: 0.5rem;
+    background-color: blue;
+}
+
+.text-info > .about-team > .team-card > img
+{
+    margin-bottom: 0.5rem;
+}
+
+.text-info > .about-team > .team-card > p
+{
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+/* -------------- */
+
+/** Contact Us  */
+.contact-info > .lable-primary
+{
+    margin-bottom: 1rem;
+}
+
+.contact-info > .email-info
+{
     margin-left: 2rem;
+    margin-bottom: 1rem;
 }
 
-.header > .trending
+.contact-info > .email-info > p
 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-size: 1.3rem;
 }
+/* -------------- */
 
-.header > .trending > .content > .trending-head
-{
-    display: flex;
-    justify-content: space-between;
-    margin: 0 1rem;
-    margin-top: 5rem;
-}
-
-.header > .trending > .content > .trending-head > p:first-child
-{
-    text-align: left;
-}
-
-.header > .trending > .content > .trending-head> a:last-child
-{
-    text-align: right;
-}
-
-.header > .trending > .content > .movie-cards
-{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.header > .trending > .content > .movie-cards > .card:last-child
-{
-    display: none;
-}
-
-/* ------------------------------------------------------------ */
-
-/** Footer------------------------------------------------------------- */
-.footer
-{
-    background: var(--dark-color);
-    padding: 0.5rem;
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.footer > .about
-{
-    text-align: center;
-}
-
-.footer > p
-{
-    margin-top: 0.5rem;
-}
+/* ---------------------------------------------------------------- */

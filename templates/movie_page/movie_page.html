@@ -1,0 +1,549 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your review to the world with the best movie commmunity">
+    <meta name="keywords" content="movie review ratings community">
+    <meta name="author" content="Bhardvaj, Kuldeep, Deep, Jenish, Shruti">
+
+    <!-- Google font: Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'movie_page/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'movie_page/css/mobile.css' %}" media="screen and (max-width: 600px)">
+
+    <!-- title -->
+    <title>Moview - {{ movie.name }}</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="hero-background">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
+                </div>
+                <div class="login-register">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-primary dashboard">DASHBOARD</a>
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
+                        <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                        <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <!-- End Navbar -->
+
+        <!-- Main-hero -->
+        <div class="hero">
+            <img src="{{ movie.cover_photo.url }}" alt="Cover Image">
+        </div>
+    </div>
+
+    <!-- Movie Title -->
+    <div class="container">
+        <div class="movie-title">
+            <div class="row">
+                <div class="card col">
+                    <img src="{{ movie.poster.url }}" alt="movie">
+                </div>
+                <div class="title col">
+                    <div class="movie-rating">
+                        {% if rating_avg >= 1 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 2 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 3 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 4 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        {% if rating_avg >= 5 %}
+                            <i class="fas fa-star star star-active"></i>
+                        {% else %}
+                            <i class="fas fa-star star"></i>
+                        {% endif %}
+                        <p class="lable-secondary"> {{ rating_avg }}/5 viewer rating - {{ review_count }} users </p>
+                    </div>
+                    <h1 class="heading-1">{{ movie.name }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Watched list movie list form -->
+    <form action="{% url 'add_remove_watch' %}" id="watch_list" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+    </form>
+    <!-- Favorite movie list form -->
+    <form action="add_remove_favorite" id="favorite_list" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+    </form>
+
+    <!-- Movie Information -->
+    <div class="container">
+        <div class="movie-info">
+            <div class="row">
+                <div class="col info">
+                    <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
+                    <p class="lable-primary">Genre: <span class="lable-secondary">
+                        {% for genre in movie.gerne_ids.all %}
+                            {% for key,value in genre_choices.items %}
+                                {% if key == genre.name %}
+                                    {{value}},
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </span></p>
+                    <p class="lable-primary">Story: <span class="lable-secondary">{{ movie.description}}</span></p>
+                </div>
+                <div class="col option">
+                    {% if user.is_authenticated %}
+                        {% if not watch_listed %}
+                            <a href="javascript:{submit_watch()}" class="btn btn-secondary">Add to watched list</a>
+                        {% else %}
+                            <!--! If user have this movie in the watched list -->
+                            <a href="javascript:{submit_watch()}" class="btn btn-secondary">Remove from watched list</a>
+                        {% endif %}
+
+                        {% if not favorited %}
+                            <a href="javascript:{submit_favorite()}" class="btn btn-primary">Add to favorite</a>
+                        {% else %}
+                            <!--! If user have this movie in the favorite list -->
+                            <a href="javascript:{submit_favorite()}" class="btn btn-primary">Remove from favorite</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-secondary">Add to watched list</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary">Add to favorite</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal line -->
+    <div class="container line">
+            <div class="horizontal-line"></div>
+    </div>
+
+    <!-- Movie Review -->
+    <div class="container">
+        <div class="movie-review">
+            <div class="row">
+                <div class="col review scroll-bar">
+                    <div class="review-title">
+                        <p class="lable-primary">Reviews</p>
+
+                        {% if user.is_authenticated %}
+                            {% if not user_given_review %}
+                                <p class="btn btn-primary" id="review-modal-open">Add your review</p>
+                            {% else %}
+                                <!--! If user already have post a review for movie -->
+                                <p class="btn btn-primary" id="review-modal-open">Edit your review</p>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary" id="review-modal-open">Add your review</a>
+                        {% endif %}
+
+                    </div>
+                    {% if user_given_review %}
+                        <div class="review-comment your-review">
+                            <p class="lable-primary">Your review</p>
+                            <div class="movie-rating">
+                                {% if user_review.rating >= 1 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 2 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 3 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 4 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                                {% if user_review.rating >= 5 %}
+                                    <i class="fas fa-star star-small star-active"></i>
+                                {% else %}
+                                    <i class="fas fa-star star-small"></i>
+                                {% endif %}
+                            </div>
+                            <p class="text">{{ user_review.comment }}</p>
+                        </div>
+                    {% endif %}
+
+                    {% if reviews %}
+                        {% for review in reviews %}
+                            {% if user == review.user %}
+                            {% else %}
+                                <div class="review-comment">
+                                    <p class="lable-primary">{{ review.user }}</p>
+                                    <div class="movie-rating">
+                                        {% if review.rating >= 1 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 2 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 3 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 4 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                        {% if review.rating >= 5 %}
+                                            <i class="fas fa-star star-small star-active"></i>
+                                        {% else %}
+                                            <i class="fas fa-star star-small"></i>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text">{{ review.comment }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
+                </div>
+                <div class="col friend">
+                    {% if user.is_authenticated %}
+                        <p class="btn btn-primary" id="suggest-modal-open">Suggest movie</p>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary" id="suggest-modal-open">Suggest movie</a>
+                    {% endif %}
+                    <p class="lable-primary">Friends favorite movie</p>
+                    <div class="firend-list scroll-bar">
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                        <div class="friend-card">
+                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
+                            <p class="lable-secondary">Darsh Parikh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review modal -->
+    <div class="review-modal-container hidden" id="review-modal">
+        <p class="heading-1">Your review</p>
+        <div class="review-modal">
+            <form action="{% url 'add_review' %}" id="review_form" method="POST">
+                {% csrf_token %}
+                <div class="rating-input">
+                    <p class="lable-primary">Ratings</p>
+                    <div class="movie-rating">
+                        <i class="fas fa-star star" id="rating-star"></i>
+                        <i class="fas fa-star star" id="rating-star"></i>
+                        <i class="fas fa-star star" id="rating-star"></i>
+                        <i class="fas fa-star star" id="rating-star"></i>
+                        <i class="fas fa-star star" id="rating-star"></i>
+                    </div>
+                    <input type="radio" name="rating" id="rating-1" value="1" class="radio-input" required>
+                    <input type="radio" name="rating" id="rating-2" value="2" class="radio-input" required>
+                    <input type="radio" name="rating" id="rating-3" value="3" class="radio-input" required>
+                    <input type="radio" name="rating" id="rating-4" value="4" class="radio-input" required>
+                    <input type="radio" name="rating" id="rating-5" value="5" class="radio-input" required>
+                </div>
+                <div class="review-input">
+                    <p class="lable-primary">Review</p>
+                    <textarea name="review" id="review" class="text-input scroll-bar" placeholder="Write your review here." minlength="5" title="Write minimum of 5 character" required></textarea>
+                </div>
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+            </form>
+            <div class="action-button">
+                <p class="btn btn-secondary" id="review-modal-close">Cancel</p>
+                {% if user_given_review %}
+                    <a href="javascript:{submit_review()}" class="btn btn-primary">Update</a>
+                {% else %}
+                    <a href="javascript:{submit_review()}" class="btn btn-primary">Submit</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="review-background-overlay hidden" id="review-overlay"></div>
+
+    <!-- Suggest modal -->
+    <div class="suggest-modal-container hidden" id="suggest-modal">
+        <p class="heading-1">Suggest movie</p>
+        <div class="suggest-modal">
+            <form action="#">
+                
+            </form>
+            <div class="action-button">
+                <p class="btn btn-secondary" id="suggest-modal-close">Cancel</p>
+                <a href="#" class="btn btn-primary">Send</a>
+            </div>
+        </div>
+    </div>
+    <div class="suggest-background-overlay hidden" id="suggest-overlay"></div>
+
+    <!-- Footer -->
+    <div class="container">
+        <div class="footer">
+            <div class="about">
+                <a href="{% url 'about' %}" class="btn btn-secondary lable-primary">About us</a>
+                <a href="http://www.twitter.com/" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="http://www.instagram.com/" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="https://www.youtube.com/" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+            <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Rating star handler
+        let rating_radio = document.getElementsByName('rating');
+
+        for (let i = 0; i < rating_radio.length; i++)
+        {
+            rating_radio[i].addEventListener('click', rating_handler);
+        }
+
+        function rating_handler()
+        {
+            let rating = document.querySelector('input[name="rating"]:checked').value;
+            
+            let rating_star = document.querySelectorAll('#rating-star');
+
+            for (let i = 0; i < rating_star.length; i++)
+            {
+                rating_star[i].classList.remove('star-active');
+            }
+
+            for (let i = 0; i < rating; i++)
+            {
+                rating_star[i].classList.add('star-active');
+            }
+        }
+
+        // Open close review modal
+        review_modal = document.getElementById('review-modal');
+        review_overlay = document.getElementById('review-overlay');
+        review_modal_close = document.getElementById('review-modal-close');
+        review_modal_open = document.getElementById('review-modal-open');
+        console.log(review_modal);
+        console.log(review_overlay);
+
+        function close_review_modal()
+        {
+            review_modal.classList.add('hidden');
+            review_overlay.classList.add('hidden');
+        }
+
+        function open_review_modal()
+        {
+            review_modal.classList.remove('hidden');
+            review_overlay.classList.remove('hidden');
+        }
+
+        review_modal_open.addEventListener('click', open_review_modal);
+        review_overlay.addEventListener('click', close_review_modal);
+        review_modal_close.addEventListener('click', close_review_modal);
+
+
+        // Open close suggest friend modal
+        suggest_modal = document.getElementById('suggest-modal');
+        suggest_overlay = document.getElementById('suggest-overlay');
+        suggest_modal_close = document.getElementById('suggest-modal-close');
+        suggest_modal_open = document.getElementById('suggest-modal-open');
+        console.log(suggest_modal);
+        console.log(suggest_overlay);
+
+        function close_suggest_modal()
+        {
+            suggest_modal.classList.add('hidden');
+            suggest_overlay.classList.add('hidden');
+        }
+
+        function open_suggest_modal()
+        {
+            suggest_modal.classList.remove('hidden');
+            suggest_overlay.classList.remove('hidden');
+        }
+
+        suggest_modal_open.addEventListener('click', open_suggest_modal);
+        suggest_overlay.addEventListener('click', close_suggest_modal);
+        suggest_modal_close.addEventListener('click', close_suggest_modal);
+
+
+        // Submit the review with rating
+        function submit_review()
+        {
+            let formValid = document.getElementById('review_form').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('review_form').submit();
+            }
+            else
+            {
+                let reviewValid = document.getElementById('review').checkValidity();
+
+                if (reviewValid == false)
+                {
+                    document.getElementById('review').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('review').classList.remove('text-error');
+                }
+            }
+        }
+
+        // Add/remove watched list
+        function submit_watch()
+        {
+            let formValid = document.getElementById('watch_list').checkValidity();
+            if (formValid == true)
+            {
+                document.getElementById('watch_list').submit();
+            }
+        }
+
+        // Add/remove favorite list
+        function submit_favorite()
+        {
+            let formValid = document.getElementById('favorite_list').checkValidity();
+            if (formValid == true)
+            {
+                document.getElementById('favorite_list').submit();
+            }
+        }
+
+    </script>
+</body>
+</html>

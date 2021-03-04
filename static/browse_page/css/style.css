@@ -3,12 +3,15 @@
     --max-width: 1250px;
     --dark-color: #222222;
     --darker-dark-color: #1A1A1A;
-    --darker-red-color: #260D0D;
     --light-color: #f2f2f2;
     --button-disabled-color: #996666;
     --button-primary-color: #F53D3D;
     --button-hover-color: #E51A1A;
+    --rating-primary-color: #FFC06A;
+    --share-button-color : #beca5c;
+    --share-hover-color : #97a149;
 }
+
 
 /** Reset----------------------------------------------------- */
 *
@@ -47,10 +50,12 @@ textarea
 	font-family:inherit;
 }
 
-input:focus
+input:focus,
+textarea:focus
 {
 	outline:0;
 }
+
 
 /** Utility------------------------------------------------------ */
 .container
@@ -75,6 +80,34 @@ img
 ul
 {
     list-style: none;
+}
+
+/*! Scroll bar style */
+.scroll-bar::-webkit-scrollbar 
+{
+    width: 5px;
+    background: transparent;
+}
+
+.scroll-bar::-webkit-scrollbar-track
+{
+    background: transparent;
+}
+
+.scroll-bar::-webkit-scrollbar-corner
+{
+    background: transparent;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb 
+{
+    background: var(--button-hover-color);
+}
+/*! End Scroll bar style */
+
+.hidden
+{
+    display: none;
 }
 
 .btn
@@ -134,6 +167,11 @@ ul
     color: var(--light-color);
 }
 
+.text
+{
+    color: var(--light-color);
+}
+
 .heading-1
 {
     font-size: 60px;
@@ -144,7 +182,9 @@ ul
 
 .card
 {
-    margin: 1rem 1rem;
+    /* margin: 1rem 1rem;
+    margin: 0;
+    margin-right: 1rem; */
     position: relative;
 }
 
@@ -158,8 +198,8 @@ ul
 
 .card > img
 {
-    max-width: 175px;
-    display: inline-block;
+    max-width: 100%;
+    display: block;
 }
 
 .card:hover > .name
@@ -185,9 +225,15 @@ ul
     margin-bottom: 1rem;
 }
 
-.text-error
+textarea.text-input
 {
-    background: var(--darker-red-color);
+    padding: 0.5rem 0.5rem;
+    resize: vertical;
+}
+
+select.text-input
+{
+    width: 175px;
 }
 
 .text-input:focus
@@ -195,39 +241,33 @@ ul
     border-width: 1px;
     border-style: solid;
     border-color: var(--button-primary-color);
-}
+} 
 
-.check-box-input
+.radio-input
 {
-    opacity: 1;
-    width: 21px;
-    height: 21px;
-    cursor: pointer;
-    outline: none;
+    margin-right: 0.3rem;
     appearance: none;
-    margin-right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
 }
 
-.check-box-input::after
+.star
 {
-    content: url("../img/Checkbox_unchecked.png");
+    font-size: 2rem;
+    color: #000;
 }
 
-.check-box-input:checked::after
+.star-small
 {
-    content: url("../img/Checkbox_checked.png");
+    font-size: 1rem;
+    color: #000;
 }
 
-/** Background---------------------------------------------------------- */
-body
+.star-active
 {
-    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/Background_1.png), var(--dark-color);
-    background-size: cover;
-    background-position: top center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
+    color: var(--rating-primary-color);
 }
-/* ---------------------------------------------------------- */
+
 
 /** Navbar------------------------------------------------------ */
 nav
@@ -246,34 +286,124 @@ nav > .logo > a > img
 /* -------------------------------------------------------------- */
 
 
-/** Login-------------------------------------------------------------- */
-.register-container
+/** hero---------------------------------------------------------------------- */
+.hero
 {
-    max-width: 490px;
-    margin: 5rem auto;
-    background: var(--dark-color);
+    margin-top: -5rem;
+    height: 20rem;
+    overflow: hidden;
+}
+
+.hero > img
+{
+    object-fit: cover;
+    object-position: top center;
+    height: 100%;
+}
+/* ---------------------------------------------------------------------- */
+
+
+/** Search Title------------------------------------------------------ */
+.search-title
+{
+    margin-top: -10rem;
+    margin-bottom: 2rem;
+}
+
+.row
+{
+    display: flex;
+    align-items: center;
+}
+
+.form-row
+{
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    padding-bottom: 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px var(--darker-dark-color);
+    background-color: var(--dark-color);
+}
+
+.form-row > div
+{
+    margin-right: 1rem;
+}
+
+.form-row > .search-button
+{
+    margin-top: 1rem;
+}
+/* ---------------------------------------------------------------- */
+
+/*! Search result-Not found ------------------------------------------------------ */
+.not-found
+{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
+    margin-bottom: 2rem;
+}
+/* ------------------------------------------------------------------------ */
+
+/*! Search result-Home ------------------------------------------------------ */
+.subtitle
+{
+    font-size: 1.5rem;
 }
 
-.register-container > .heading-1
-{
-    font-weight: 700;
-    margin: 1rem 0;
-}
+/* ------------------------------------------------------------------------ */
 
-.register-container > a
+/*! Search result-Output ------------------------------------------------------ */
+.movie-grid
 {
-    margin: 2rem 0;
-}
-
-.register-container > p:last-child
-{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 200px));
+    justify-content: center;
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
+
+.movie-grid > .card-wrap
+{
+    margin: 0 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.movie-grid > .card-wrap > .card > .lable-secondary
+{
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.movie-grid > .card-wrap:hover > .card > .lable-secondary
+{
+    background-color: var(--button-primary-color);
+}
+/* ------------------------------------------------------------------------ */
+
+/** Hrizontal line-------------------------------------------------------- */
+.line
+{
+    position: relative;
+    padding-bottom: 1px;
+    margin-bottom: 2rem;
+}
+
+.horizontal-line::after
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--darker-dark-color);
+}
+/* ---------------------------------------------------------------- */
 
 
 /** Footer------------------------------------------------------------- */
@@ -297,3 +427,4 @@ nav > .logo > a > img
 {
     margin-top: 0.5rem;
 }
+/* ------------------------------------------------------------- */

@@ -1,0 +1,195 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your review to the world with the best movie commmunity">
+    <meta name="keywords" content="movie review ratings community">
+    <meta name="author" content="Bhardvaj, Kuldeep, Darsh, Jenish, Shruti">
+
+    <!-- Google font: Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'browse_page/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'browse_page/css/tablet.css' %}" media="screen and (max-width: 850px)">
+    <link rel="stylesheet" href="{% static 'browse_page/css/mobile.css' %}" media="screen and (max-width: 600px)">
+
+    <!-- title -->
+    <title>Moview - Search</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="hero-background">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
+                </div>
+                <div class="login-register">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-primary dashboard">DASHBOARD</a>
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
+                        <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                        <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <!-- End Navbar -->
+
+        <!-- Main-hero -->
+        <div class="hero">
+            <img src="{% static 'browse_page/img/browse_background.jpg' %}" alt="Background Image">
+        </div>
+    </div>
+
+    <!-- Search Title -->
+    <div class="container">
+        <div class="search-title">
+            <a href="{% url 'browse' %}"><h1 class="heading-1">Browse Movies</h1></a>
+            <div class="row">
+                <form action="{% url 'browse_result' %}" class="form-row" id="search-form" method="GET">
+                    {% csrf_token %}
+                    <div class="name-input">
+                        <p class="lable-primary">Name</p>
+                        <input type="text" name="name" id="name" class="text-input">
+                    </div>
+                    <div class="release-input">
+                        <p class="lable-primary">Release Year</p>
+                        <select id="years" name="years" class="text-input scroll-bar">
+                            <option selected="true" disabled="disabled">Select year</option>
+                            {% for key,value in year_choices.items %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="genre-input">
+                        <p class="lable-primary">Genre</p>
+                        <select id="genres" name="genres" class="text-input scroll-bar">
+                            <option selected="true" disabled="disabled">Select genre</option>
+                            {% for key,value in genre_choices.items %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <a href="javascript:{search()}" class="btn btn-primary search-button" id="search">Search</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--! Search Result - Home-->
+    <!-- Currently Trending movies -->
+    <div class="container">
+        <p class="lable-primary subtitle">Trending Movies</p>
+        <div class="movie-grid">
+            {% for movie in trending_movies %}
+                <a href="{% url 'movie' movie.id %}" class="card-wrap">
+                    <div class="card">
+                        <img src="{{ movie.poster.url }}" alt="movie">
+                        <p class="lable-secondary">{{ movie.name}}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <!-- ---------------------------------------------------------------------------- -->
+
+        <!-- Horizontal line -->
+        <div class="container line">
+            <div class="horizontal-line"></div>
+        </div>
+
+        <!-- Upcoming Movie lists -->
+        <p class="lable-primary subtitle">Upcoming Movies</p>
+        <div class="movie-grid">
+            {% for movie in upcoming_movies %}
+                <a href="{% url 'movie' movie.id %}" class="card-wrap">
+                    <div class="card">
+                        <img src="{{ movie.poster.url }}" alt="movie">
+                        <p class="lable-secondary">{{ movie.name}}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <!-- ---------------------------------------------------------------------------- -->
+
+        <!-- Horizontal line -->
+        <div class="container line">
+            <div class="horizontal-line"></div>
+        </div>
+
+        <!-- Movies Currently In Theaters -->
+        <p class="lable-primary subtitle">Currently In Theaters</p>
+        <div class="movie-grid">
+            {% for movie in theater_movies %}
+                <a href="{% url 'movie' movie.id %}" class="card-wrap">
+                    <div class="card">
+                        <img src="{{ movie.poster.url }}" alt="movie">
+                        <p class="lable-secondary">{{ movie.name}}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <!-- ---------------------------------------------------------------------------- -->
+    </div>
+
+    <!-- Horizontal line -->
+    <div class="container line">
+        <div class="horizontal-line"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="container">
+        <div class="footer">
+            <div class="about">
+                <a href="{% url 'about' %}" class="btn btn-secondary lable-primary">About us</a>
+                <a href="http://www.twitter.com/" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="http://www.instagram.com/" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="https://www.youtube.com/" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+            <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Search form
+        function search()
+        {
+            let formValid = document.getElementById('search-form').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('search-form').submit();
+            }
+            else
+            {
+                let reviewValid = document.getElementById('review').checkValidity();
+
+                if (reviewValid == false)
+                {
+                    document.getElementById('review').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('review').classList.remove('text-error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

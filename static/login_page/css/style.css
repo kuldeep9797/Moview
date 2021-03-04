@@ -3,6 +3,7 @@
     --max-width: 1250px;
     --dark-color: #222222;
     --darker-dark-color: #1A1A1A;
+    --darker-red-color: #260D0D;
     --light-color: #f2f2f2;
     --button-disabled-color: #996666;
     --button-primary-color: #F53D3D;
@@ -184,6 +185,11 @@ ul
     margin-bottom: 1rem;
 }
 
+.text-error
+{
+    background: var(--darker-red-color);
+}
+
 .text-input:focus
 {
     border-width: 1px;
@@ -246,4 +252,27 @@ nav > .logo > a > img
 .login-container > p:last-child
 {
     margin-bottom: 1rem;
+}
+
+
+/** Footer------------------------------------------------------------- */
+.footer
+{
+    background: var(--dark-color);
+    padding: 0.5rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer > .about
+{
+    text-align: center;
+}
+
+.footer > p
+{
+    margin-top: 0.5rem;
 }

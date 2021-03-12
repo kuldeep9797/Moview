@@ -1,4 +1,5 @@
 {% load static %}
+{% load avg_rating %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,15 +20,15 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{% static 'browse_page/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'browse_page/css/tablet.css' %}" media="screen and (max-width: 850px)">
-    <link rel="stylesheet" href="{% static 'browse_page/css/mobile.css' %}" media="screen and (max-width: 600px)">
+    <link rel="stylesheet" href="{% static 'movie_list/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'movie_list/css/tablet.css' %}" media="screen and (max-width: 850px)">
+    <link rel="stylesheet" href="{% static 'movie_list/css/mobile.css' %}" media="screen and (max-width: 600px)">
 
     <!-- Moview Icon -->
     <link rel="shortcut icon" href="{% static 'img/Favicon.ico' %}" type="image/x-icon">
 
     <!-- title -->
-    <title>Moview - Search</title>
+    <title>Moview - Trending</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -96,68 +97,67 @@
     </div>
 
     <!--! Search Result - Home-->
-    <!-- Currently Trending movies -->
     <div class="container">
-        <div class="subtitle-wrap">
-            <p class="lable-primary subtitle">Trending Movies</p>
-            <a href="{% url 'trending_movie_list' %}" class="link">view all</a>
-        </div>
+        <p class="lable-primary subtitle">Currently In Theaters</p>
         <div class="movie-grid">
             {% for movie in trending_movies %}
                 <a href="{% url 'movie' movie.id %}" class="card-wrap">
                     <div class="card">
                         <img src="{{ movie.poster.url }}" alt="movie">
-                        <p class="lable-secondary">{{ movie.name}}</p>
+                        <!-- <p class="lable-secondary">Free Guy</p> -->
+                    </div>
+                    <div class="card-details">
+                        <!-- Horizontal line -->
+                        <div class="container line">
+                            <div class="horizontal-line"></div>
+                        </div>
+
+                        <p class="lable-primary">{{ movie.name}}</p>
+                        <br>
+                        <div class="movie-rating">
+                            {% avg_movie_rating movie.id as rating_avg %}
+                            {% if rating_avg >= 1 %}
+                                <i class="fas fa-star star star-active"></i>
+                            {% else %}
+                                <i class="fas fa-star star"></i>
+                            {% endif %}
+                            {% if rating_avg >= 2 %}
+                                <i class="fas fa-star star star-active"></i>
+                            {% else %}
+                                <i class="fas fa-star star"></i>
+                            {% endif %}
+                            {% if rating_avg >= 3 %}
+                                <i class="fas fa-star star star-active"></i>
+                            {% else %}
+                                <i class="fas fa-star star"></i>
+                            {% endif %}
+                            {% if rating_avg >= 4 %}
+                                <i class="fas fa-star star star-active"></i>
+                            {% else %}
+                                <i class="fas fa-star star"></i>
+                            {% endif %}
+                            {% if rating_avg >= 5 %}
+                                <i class="fas fa-star star star-active"></i>
+                            {% else %}
+                                <i class="fas fa-star star"></i>
+                            {% endif %}
+                        </div>
+                        <br>
+                        <p class="lable-primary">Genre: <span class="lable-secondary">Action, Sci-fi,</span></p>
+                        <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
+                        <p class="lable-primary">Genre: <span class="lable-secondary">
+                            {% for genre in movie.gerne_ids.all %}
+                                {% for key,value in genre_choices.items %}
+                                    {% if key == genre.name %}
+                                        {{value}},
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </span></p>
                     </div>
                 </a>
             {% endfor %}
         </div>
-        <!-- ---------------------------------------------------------------------------- -->
-
-        <!-- Horizontal line -->
-        <div class="container line">
-            <div class="horizontal-line"></div>
-        </div>
-
-        <!-- Upcoming Movie lists -->
-        <div class="subtitle-wrap">
-            <p class="lable-primary subtitle">Upcoming Movies</p>
-            <a href="{% url 'upcoming_movie_list' %}" class="link">view all</a>
-        </div>
-        <div class="movie-grid">
-            {% for movie in upcoming_movies %}
-                <a href="{% url 'movie' movie.id %}" class="card-wrap">
-                    <div class="card">
-                        <img src="{{ movie.poster.url }}" alt="movie">
-                        <p class="lable-secondary">{{ movie.name}}</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-        <!-- ---------------------------------------------------------------------------- -->
-
-        <!-- Horizontal line -->
-        <div class="container line">
-            <div class="horizontal-line"></div>
-        </div>
-
-        <!-- Movies Currently In Theaters -->
-        <div class="subtitle-wrap">
-            <p class="lable-primary subtitle">Currently In Theaters</p>
-            <a href="{% url 'theater_movie_list' %}" class="link">view all</a>
-        </div>
-        <div class="movie-grid">
-            {% for movie in theater_movies %}
-                <a href="{% url 'movie' movie.id %}" class="card-wrap">
-                    <div class="card">
-                        <img src="{{ movie.poster.url }}" alt="movie">
-                        <p class="lable-secondary">{{ movie.name}}</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-        <!-- ---------------------------------------------------------------------------- -->
-    </div>
 
     <!-- Horizontal line -->
     <div class="container line">

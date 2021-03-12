@@ -3,9 +3,13 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 
 def login(request):
+    if (request.user.is_authenticated):
+        return redirect('index')
     return render(request, 'login_page/login.html')
 
 def register(request):
+    if (request.user.is_authenticated):
+        return redirect('index')
     return render(request, 'register_page/register.html')
 
 def login_process(request):

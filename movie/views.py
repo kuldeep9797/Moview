@@ -84,8 +84,8 @@ def add_review(request):
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 
 
-# TODO add/remove form watched list
-# TODO-------------------------------------------------------
+# Watched list add/remove
+# -------------------------------------------------------
 def add_remove_watch(request):
     movie = request.POST.get('movie_id')
     user_id = request.user.id
@@ -104,8 +104,8 @@ def add_remove_watch(request):
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 
 
-# TODO add/remove form watched list
-# TODO-------------------------------------------------------
+# Favorite list add/remove
+# -------------------------------------------------------
 def add_remove_favorite(request):
     movie = request.POST.get('movie_id')
     user_id = request.user.id
@@ -190,3 +190,48 @@ def browse_result(request):
         'get_request': request.GET,
     }
     return render(request, 'browse_page/browse_result.html', context)
+
+
+# Tranding movie list page
+#-------------------------------------------------------
+def trending_movie_list(request):
+    movies = Movie.objects.all()
+
+    trending_movies = movies
+
+    context = {
+        'genre_choices': genre_choices,
+        'year_choices': year_choices,
+        'trending_movies': trending_movies,
+    }
+    return render(request, 'movie_list/trending_movie_list.html', context)
+
+
+# Upcoming movie list page
+#-------------------------------------------------------
+def upcoming_movie_list(request):
+    movies = Movie.objects.all()
+
+    upcoming_movies = movies
+
+    context = {
+        'genre_choices': genre_choices,
+        'year_choices': year_choices,
+        'trending_movies': upcoming_movies,
+    }
+    return render(request, 'movie_list/upcoming_movie_list.html', context)
+
+
+# Theater movie list page
+#-------------------------------------------------------
+def theater_movie_list(request):
+    movies = Movie.objects.all()
+
+    theater_movies = movies
+
+    context = {
+        'genre_choices': genre_choices,
+        'year_choices': year_choices,
+        'trending_movies': theater_movies,
+    }
+    return render(request, 'movie_list/theater_movie_list.html', context)

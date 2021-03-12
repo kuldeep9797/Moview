@@ -269,6 +269,27 @@ select.text-input
 }
 
 
+/** Hrizontal line-------------------------------------------------------- */
+.line
+{
+    position: relative;
+    padding-bottom: 1px;
+    margin-bottom: 2rem;
+}
+
+.horizontal-line::after
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--darker-dark-color);
+}
+/* ---------------------------------------------------------------- */
+
+
 /** Navbar------------------------------------------------------ */
 nav
 {
@@ -338,6 +359,7 @@ nav > .logo > a > img
 }
 /* ---------------------------------------------------------------- */
 
+
 /*! Search result-Not found ------------------------------------------------------ */
 .not-found
 {
@@ -349,25 +371,21 @@ nav > .logo > a > img
 }
 /* ------------------------------------------------------------------------ */
 
-/*! Search result-Home ------------------------------------------------------ */
-.subtitle-wrap
-{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
 
-.subtitle-wrap > .subtitle
+/*! Search result-Home ------------------------------------------------------ */
+.subtitle
 {
     font-size: 1.5rem;
 }
+
 /* ------------------------------------------------------------------------ */
+
 
 /*! Search result-Output ------------------------------------------------------ */
 .movie-grid
 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 200px));
+    grid-template-columns: 1fr 1fr;
     justify-content: center;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -375,8 +393,26 @@ nav > .logo > a > img
 
 .movie-grid > .card-wrap
 {
+    display: flex;
     margin: 0 0.5rem;
     margin-bottom: 2rem;
+    max-width: 500px;
+}
+
+.movie-grid > .card-wrap:hover .horizontal-line::after
+{
+    background-color: var(--button-primary-color);
+}
+
+.movie-grid > .card-wrap > .card
+{
+    margin-right: 1rem;
+    width: 40%;
+}
+
+.movie-grid > .card-wrap > .card-details
+{
+    width: 60%;
 }
 
 .movie-grid > .card-wrap > .card > .lable-secondary
@@ -390,26 +426,6 @@ nav > .logo > a > img
     background-color: var(--button-primary-color);
 }
 /* ------------------------------------------------------------------------ */
-
-/** Hrizontal line-------------------------------------------------------- */
-.line
-{
-    position: relative;
-    padding-bottom: 1px;
-    margin-bottom: 2rem;
-}
-
-.horizontal-line::after
-{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--darker-dark-color);
-}
-/* ---------------------------------------------------------------- */
 
 
 /** Footer------------------------------------------------------------- */

@@ -14,7 +14,7 @@
 body
 {
     background: linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/ForegroundGredient.png), url(../img/Background_2.png), var(--dark-color);
-    background: url(../img/ForegroundGredient.png), url(../img/Background_2.png), var(--dark-color);
+    background: url(../../img/ForegroundGredient.png), url(../../img/Background_2.jpg), var(--dark-color);
     background-size: cover, cover, 200%, 200%;
     background-position: top center;
     background-repeat: no-repeat;

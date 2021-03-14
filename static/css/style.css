@@ -146,7 +146,7 @@ ul
 /* ---------------------------------------------------------- */
 body
 {
-    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/Background_1.png), var(--dark-color);
+    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/Background_1.jpg), var(--dark-color);
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
@@ -216,7 +216,7 @@ nav > .logo > a > img
     flex-wrap: wrap;
 }
 
-.header > .trending > .content > .movie-cards > .card:last-child
+.header > .trending > .content > .movie-cards > a:last-child
 {
     display: none;
 }

@@ -4,14 +4,17 @@ from .models import Movie, Review, Gerne
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['name', 'release_year']
+    list_display = ['name', 'release_year', 'isTrending', 'isUpcoming', 'isInTheater']
     search_fields = ('name',)
+    list_filter = ('gerne_ids',)
+    list_editable = ('isTrending', 'isUpcoming', 'isInTheater')
     list_per_page = 25
 
 @admin.register(Review)
 class MovieAdmin(admin.ModelAdmin):
     list_display = ['movie_id', 'user', 'rating']
     search_fields = ('user','movie_id')
+    list_filter = ('rating',)
     list_per_page = 25
 
 @admin.register(Gerne)

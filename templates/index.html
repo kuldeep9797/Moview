@@ -72,30 +72,14 @@
                         <a href="{% url 'browse' %}"class="lable-secondary link">BROWSE ALL MOVIES</a>
                     </div>
                     <div class="movie-cards">
-                        <div class="card">
-                            <img src="{% static 'img/movie_1.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">Gost Busters</div>
-                        </div>
-                        <div class="card">
-                            <img src="{% static 'img/movie_2.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">F8</div>
-                        </div>
-                        <div class="card">
-                            <img src="{% static 'img/movie_3.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">Murder On Nile</div>
-                        </div>
-                        <div class="card">
-                            <img src="{% static 'img/movie_4.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">No Time To Die</div>
-                        </div>
-                        <div class="card">
-                            <img src="{% static 'img/movie_5.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">Black Widow</div>
-                        </div>
-                        <div class="card"> 
-                            <img src="{% static 'img/movie_6.jpg' %}" alt="movie">
-                            <div class="name lable-secondary">Free Guy</div>
-                        </div>
+                        {% for movie in trending_movies %}
+                            <a href="{% url 'movie' movie.id %}">
+                                <div class="card">
+                                    <img src="{{ movie.poster.url }}" alt="movie">
+                                    <div class="name lable-secondary">{{ movie.name }}</div>
+                                </div>
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

@@ -124,14 +124,14 @@ def add_remove_favorite(request):
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 
 
-# TODO data for browse page
-# TODO-------------------------------------------------------
+# browse home page
+# -------------------------------------------------------
 def browse(request):
     movies = Movie.objects.all()
 
-    trending_movies = movies
-    upcoming_movies = movies
-    theater_movies = movies
+    trending_movies = movies.filter(isTrending = True)[:6]
+    upcoming_movies = movies.filter(isUpcoming = True)[:6]
+    theater_movies = movies.filter(isInTheater = True)[:6]
 
     context = {
         'genre_choices': genre_choices,
@@ -196,6 +196,7 @@ def browse_result(request):
 #-------------------------------------------------------
 def trending_movie_list(request):
     movies = Movie.objects.all()
+    movies = movies.filter(isTrending = True)
 
     trending_movies = movies
 
@@ -211,6 +212,7 @@ def trending_movie_list(request):
 #-------------------------------------------------------
 def upcoming_movie_list(request):
     movies = Movie.objects.all()
+    movies = movies.filter(isUpcoming = True)
 
     upcoming_movies = movies
 
@@ -226,6 +228,7 @@ def upcoming_movie_list(request):
 #-------------------------------------------------------
 def theater_movie_list(request):
     movies = Movie.objects.all()
+    movies = movies.filter(isInTheater = True)
 
     theater_movies = movies
 

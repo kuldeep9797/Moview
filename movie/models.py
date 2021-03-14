@@ -26,6 +26,9 @@ class Movie(models.Model):
     # avg_rating = models.FloatField(blank=True)
     release_year = models.IntegerField('year', choices=[(r,r) for r in range(1900, datetime.date.today().year+3)], default=current_year)
     gerne_ids = models.ManyToManyField('Gerne',blank=True)
+    isTrending = models.BooleanField(default = False)
+    isUpcoming = models.BooleanField(default = False)
+    isInTheater = models.BooleanField(default = False)
 
     def __str__(self):
         return self.name

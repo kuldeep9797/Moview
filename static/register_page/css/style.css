@@ -210,18 +210,18 @@ ul
 
 .check-box-input::after
 {
-    content: url("../img/Checkbox_unchecked.png");
+    content: url("../../img/Checkbox_unchecked.png");
 }
 
 .check-box-input:checked::after
 {
-    content: url("../img/Checkbox_checked.png");
+    content: url("../../img/Checkbox_checked.png");
 }
 
 /** Background---------------------------------------------------------- */
 body
 {
-    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../img/Background_1.png), var(--dark-color);
+    background: linear-gradient(rgba(0,0,0,0) 70%, rgba(22, 22, 22, 1)), linear-gradient(to left,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), linear-gradient(to right,rgba(0,0,0,0) 70%, rgba(22, 22, 22, 0.7)), url(../../img/Background_1.jpg), var(--dark-color);
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;

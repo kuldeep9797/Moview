@@ -17,6 +17,12 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+
+admin.site.enable_nav_sidebar = False
+admin.site.site_header = "Moview Admin Panel"
+admin.site.site_title = "Moview Admin"
+admin.site.index_title = "Moview administration"
 
 urlpatterns = [
     path('', include('pages.urls')),

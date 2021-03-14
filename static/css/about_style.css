@@ -163,7 +163,7 @@ nav > .logo > a > img
 /** Main Hero----------------------------------------------------------------- */
 .hero-background
 {
-    background: url("../img/about_background.png");
+    background: url("../img/about_background.jpg");
     background-size: cover;
     background-position: center;
 }

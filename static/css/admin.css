@@ -1,0 +1,80 @@
+:root
+{
+    --max-width: 1250px;
+    --dark-color: #222222;
+    --darker-dark-color: #1A1A1A;
+    --light-color: #f2f2f2;
+    --button-disabled-color: #996666;
+    --button-primary-color: #F53D3D;
+    --button-hover-color: #E51A1A;
+    --rating-primary-color: #FFC06A;
+    --share-button-color : #beca5c;
+    --share-hover-color : #97a149;
+}
+
+/* Button style */
+input[type="submit"],
+input[type=submit].default
+{
+    color: var(--light-color);
+    background: var(--button-primary-color);
+}
+
+input[type=submit].default
+{
+    background-color: var(--share-button-color);
+    color: var(--dark-color);
+}
+
+input[type="submit"]:hover,
+input[type=submit].default:hover
+{
+    background: var(--button-hover-color);
+}
+
+input[type=submit].default:hover
+{
+    background-color: var(--share-hover-color);
+}
+
+#header
+{
+    background: var(--button-primary-color);
+    color:var(--light-color);
+}
+
+div.breadcrumbs
+{
+    background: var(--button-hover-color);
+}
+
+tbody
+{
+    /* background: var(--dark-color); */
+}
+
+.module h2, .module caption, .inline-group h2 
+{
+    background: var(--button-primary-color);
+}
+
+.object-tools a.addlink
+{
+    background-color: var(--button-primary-color);
+}
+
+.object-tools a.addlink:hover
+{
+    background-color: var(--button-hover-color);
+}
+
+#recent-actions-module
+{
+    background-color: var(--button-primary-color);
+}
+
+#content-related .module h2
+{
+    background-color: var(--button-primary-color);
+    color: var(--light-color);
+}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from django.db.models import Avg
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from .models import Movie, Review
 from .options import genre_choices, year_choices
@@ -77,9 +78,13 @@ def add_review(request):
         review.rating = rating
         review.comment = review_text
         review.save()
+        # Message
+        messages.success(request, 'Your review updated successfully.')
     else:
         new_review = Review(user = user_db, rating = rating, comment=review_text, movie_id = movie_db)
         new_review.save()
+        # Message
+        messages.success(request, 'Your review added successfully.')
     
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 

@@ -1,0 +1,29 @@
+<!-- Message System -->
+{% if messages %}
+{% for message in messages %}
+    <div class="message" id="message">
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="message-container message-error">
+                <p class="text lable-secondary" id="message-text">{{ message }}</p>
+                <i class="fas fa-times text" id="message_close"></i>
+            </div>
+        {% else %}
+            <div class="message-container message-success">
+                <p class="text lable-secondary" id="message-text">{{ message }}</p>
+                <i class="fas fa-times text" id="message_close"></i>
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.4.4.min.js"></script> 
+<script>
+    setTimeout(function () {
+        $('#message').fadeOut('slow');
+    }, 2000);
+
+    $('#message_close').click(function () {
+        $('#message').fadeOut('fast');
+    });
+</script>
+{% endif %}

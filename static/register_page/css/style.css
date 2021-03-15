@@ -8,6 +8,8 @@
     --button-disabled-color: #996666;
     --button-primary-color: #F53D3D;
     --button-hover-color: #E51A1A;
+    --message-error-color: #C05026;
+    --message-success-color: #A4B61F;
 }
 
 /** Reset----------------------------------------------------- */
@@ -131,6 +133,11 @@ ul
 {
     font-size: 16px;
     font-weight: 400;
+    color: var(--light-color);
+}
+
+.text
+{
     color: var(--light-color);
 }
 
@@ -297,3 +304,58 @@ nav > .logo > a > img
 {
     margin-top: 0.5rem;
 }
+
+
+/* Message------------------------------------------------------------- */
+.message
+{
+    display: block;
+
+    position: absolute;
+    top: 1rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    z-index: 100;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.message-container
+{
+
+    display: flex;
+    align-items: center;
+    Justify-content: space-between;
+
+    border-radius: 5px;
+    width: 100%;
+
+    padding: 0.5rem 2rem;
+    margin: 0 1rem;
+}
+
+.message-success
+{
+    background-color: var(--message-success-color);
+    box-shadow: 0px 20px 30px #a4b61f60;
+}
+
+.message-error
+{
+    background-color: var(--message-error-color);
+    box-shadow: 0px 20px 30px #c04f2660;
+}
+
+.message-container > p
+{
+    margin-right: 1rem;
+    width: 100%;
+}
+
+.message-container > i
+{
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+}
+/* ------------------------------------------------------------- */

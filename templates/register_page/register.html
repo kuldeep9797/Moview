@@ -73,6 +73,7 @@
                     <input type="password" name="password" id="password" class="text-input" minlength="8" maxlength="12" title="Min 8 characters and Max 12 characters" required/>
                 </div>
                 <div class="TC-input">
+                    <p id="tc_error_message"></p>
                     <input type="checkbox" name="tc" id="tc" name="peripherals" value="true" class="check-box-input" required/>
                     <span class="lable-secondary">Agree to t&c.</span>
                 </div>
@@ -111,6 +112,7 @@
                 let usenameValid = document.getElementById('username').checkValidity();
                 let emailValid = document.getElementById('email').checkValidity();
                 let passwordValid = document.getElementById('password').checkValidity();
+                let tcValid = document.getElementById('tc').checkValidity();
 
                 if (usenameValid == false)
                 {
@@ -137,6 +139,18 @@
                 else
                 {
                     document.getElementById('password').classList.remove('text-error');
+                }
+
+                if (tcValid == false)
+                {
+                    let tcErrorMessage = document.getElementById('tc_error_message');
+                    tcErrorMessage.textContent = "*please agree to terms and conditions";
+                    tcErrorMessage.style.color = "var(--button-primary-color)"
+                }
+                else
+                {
+                    let tcErrorMessage = document.getElementById('tc_error_message');
+                    tcErrorMessage.textContent = "";
                 }
             }
         }

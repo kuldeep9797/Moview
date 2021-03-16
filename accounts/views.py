@@ -13,7 +13,7 @@ from movie.models import Gerne
 def login(request):
     if (request.user.is_authenticated):
         if (Profile.objects.filter(user_id=request.user).exists()):
-            return redirect('index')
+            return redirect('dashboard')
         else:
             return redirect('profile_setup')
     return render(request, 'login_page/login.html')
@@ -24,7 +24,7 @@ def login(request):
 def register(request):
     if (request.user.is_authenticated):
         if (Profile.objects.filter(user_id=request.user).exists()):
-            return redirect('index')
+            return redirect('dashboard')
         else:
             return redirect('profile_setup')
     return render(request, 'register_page/register.html')
@@ -35,7 +35,7 @@ def register(request):
 def profile_setup(request):
     if request.user.is_authenticated:
         if (Profile.objects.filter(user_id=request.user).exists()):
-                return redirect('index')
+                return redirect('dashboard')
     context = {
         'genre_choices': genre_choices,
     }
@@ -56,7 +56,7 @@ def login_process(request):
             # Message
             messages.success(request, 'You are now logged in.')
             if (Profile.objects.filter(user_id=user).exists()):
-                return redirect('index')
+                return redirect('dashboard')
             else:
                 return redirect('profile_setup')
         else:
@@ -135,4 +135,31 @@ def profile_setup_process(request):
             new_profile.save()
     # Message
     messages.success(request, 'Your profile updated successfully.')
-    return redirect('index')
+    return redirect('dashboard')
+
+
+# Dashboard page
+# -----------------------------------------------------
+def dashboard(request):
+    if (not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if ( not Profile.objects.filter(user_id=request.user).exists()):
+            return redirect('profile_setup')
+
+    user_id = request.user
+
+    favorite_movies = FavoriteList.objects.filter(user = user_id)[:4]
+    watched_movies = WatchList.objects.filter(user = user_id)[:4]
+
+    your_friends = None
+    friend_count = 0
+
+    context = {
+        "favorite_movies" : favorite_movies,
+        "watched_movies" : watched_movies,
+        "your_friends": your_friends,
+        "friend_count": friend_count,
+        'genre_choices': genre_choices,
+    }
+    return render(request, 'dashboard/dashboard.html', context)

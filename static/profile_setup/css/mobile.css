@@ -4,6 +4,11 @@
     display: none;
 }
 
+.logout
+{
+    display: none;
+}
+
 .login
 {
     margin-right: 0.5rem;

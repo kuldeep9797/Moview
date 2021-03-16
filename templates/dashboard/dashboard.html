@@ -1,0 +1,253 @@
+{% load static %}
+{% load profile_data %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your review to the world with the best movie commmunity">
+    <meta name="keywords" content="movie review ratings community">
+    <meta name="author" content="Bhardvaj, Kuldeep, Deep, Jenish, Shruti">
+
+    <!-- Google font: Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwsome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/tablet.css' %}" media="screen and (max-width: 800px)">
+    <link rel="stylesheet" href="{% static 'dashboard/css/mobile.css' %}" media="screen and (max-width: 600px)">
+
+    <!-- Moview Icon -->
+    <link rel="shortcut icon" href="{% static 'img/Favicon.ico' %}" type="image/x-icon">
+
+    <!-- title -->
+    <title>Moview - Search</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="hero-background">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'img/Logo.png' %}" alt="Moview"></a>
+                </div>
+                <div class="login-register">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'browse' %}" class="btn btn-primary dashboard">BROWSE MOVIES</a>
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
+                        <form action="{% url 'logout_process' %}" id="logout" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary login">LOGIN</a>
+                        <a href="{% url 'register' %}" class="btn btn-secondary register">REGISTER</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <!-- End Navbar -->
+
+        <!-- Main-hero -->
+        <div class="hero">
+            <img src="{% static 'img/dashboard_background.jpg'%}" alt="Cover Image">
+        </div>
+    </div>
+
+
+
+    <!-- Search Title -->
+    <div class="container">
+        <div class="dashboard-title">
+            <!-- <h1 class="heading-1">Dashboard</h1> -->
+            <div class="row">
+                {% get_profile_image user.id as user_data %}
+                <img src="{% get_profile_image user.id %}" alt="Profile">
+                <div class="col user-data">
+                    <p class="heading-2">{% get_profile_name user.id %}</p>
+                    {% get_profile_genre user.id as favorite_genre %}
+                    <p class="lable-secondary">Favorite Genres: 
+                        {% for genre in favorite_genre %}
+                            {% for key,value in genre_choices.items %}
+                                {% if key == genre %}
+                                    {{value}},
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </p>
+                    <p class="lable-secondary">Number of friends: {{ friend_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--! Search Result - Home-->
+    <div class="container">
+        <div class="row dashboard-content">
+            <div class="col movie-column">
+                <div class="subtitle-wrap">
+                    <p class="lable-primary subtitle">Favorite Movies</p>
+                    <a href="#" class="link">view all</a>
+                </div>
+                <div class="movie-grid">
+                    {% if watched_movies %}
+                    {% for fmovie in favorite_movies %}
+                        <a href="{% url 'movie' fmovie.movie_id.id %}" class="card-wrap">
+                            <div class="card">
+                                <img src="{{ fmovie.movie_id.poster.url }}" alt="movie">
+                                <p class="lable-secondary">{{ fmovie.movie_id.name}}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    {% else %}
+                        <p class="lable-secondary">No Movies in Favorite List</p>
+                    {% endif %}
+                </div>
+                <div class="subtitle-wrap">
+                    <p class="lable-primary subtitle">Watched Movies</p>
+                    <a href="#" class="link">view all</a>
+                </div>
+                <div class="movie-grid">
+                    {% if watched_movies %}
+                        {% for wmovie in watched_movies %}
+                            <a href="{% url 'movie' wmovie.movie_id.id %}" class="card-wrap">
+                                <div class="card">
+                                    <img src="{{ wmovie.movie_id.poster.url }}" alt="movie">
+                                    <p class="lable-secondary">{{ wmovie.movie_id.name}}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="lable-secondary">No Movies in Watched List</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col friends-column">
+                <p class="btn btn-primary" id="suggest-modal-open">Search Users</p>
+                <p class="lable-primary">Notifications</p>
+                <div class="noti-list scroll-bar">
+                    <!--! Notification type 1: Suggestion of movie -->
+                    <div class="noti-card unread-border">
+                        <div class="content-wrap">
+                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a> suggested you black widow movie</p>
+                        </div>
+                        <div class="content-action">
+                            <a href="#" class="btn btn-primary">View Movie</a>
+                        </div>
+                    </div>
+                    <div class="noti-card">
+                        <div class="content-wrap">
+                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a> suggested you black widow movie</p>
+                        </div>
+                        <div class="content-action">
+                            <a href="#" class="btn btn-primary">View Movie</a>
+                        </div>
+                    </div>
+                    <!--! Notification type 2: Friend request -->
+                    <div class="noti-card unread-border">
+                        <div class="content-wrap">
+                            <img src="img/Darsh.png" alt="User" class="profile-img">
+                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a>'s friend request</p>
+                        </div>
+                        <div class="content-action">
+                            <a href="#" class="btn btn-secondary">Decline</a>
+                            <a href="#" class="btn btn-primary">Accept</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p class="lable-primary">Your Friends</p>
+                <div class="firend-list scroll-bar">
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <a href="#"><p class="lable-secondary link">Darsh Parikh</p></a>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                    <div class="friend-card">
+                        <img src="img/Darsh.png" alt="User" class="profile-img">
+                        <p class="lable-secondary">Darsh Parikh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal line -->
+    <div class="container line">
+        <div class="horizontal-line"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="container">
+        <div class="footer">
+            <div class="about">
+                <a href="{% url 'about' %}" class="btn btn-secondary lable-primary">About us</a>
+                <a href="http://www.twitter.com/" class="btn btn-secondary"><i class="fab fa-twitter-square"></i> Twitter</a>
+                <a href="http://www.instagram.com/" class="btn btn-secondary"><i class="fab fa-instagram-square"></i> Instagram</a>
+                <a href="https://www.youtube.com/" class="btn btn-secondary"><i class="fab fa-youtube-square"></i> YouTube</a>
+            </div>
+            <p class="lable-secondary">Copyright© 2021, All Right Reserved</p>
+        </div>
+    </div>
+
+    {% include 'partials/_messages.html' %}
+</body>
+</html>

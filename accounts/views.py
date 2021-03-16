@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from movie.options import genre_choices, year_choices
-from .models import WatchList, FavoriteList, Profile
+from .models import WatchList, FavoriteList, Profile, FriendShip
 from movie.models import Gerne
 
 
@@ -152,8 +152,8 @@ def dashboard(request):
     favorite_movies = FavoriteList.objects.filter(user = user_id)[:4]
     watched_movies = WatchList.objects.filter(user = user_id)[:4]
 
-    your_friends = None
-    friend_count = 0
+    your_friends = FriendShip.objects.filter(user1=user_id)
+    friend_count = FriendShip.objects.filter(user1=user_id).count()
 
     context = {
         "favorite_movies" : favorite_movies,
@@ -163,3 +163,8 @@ def dashboard(request):
         'genre_choices': genre_choices,
     }
     return render(request, 'dashboard/dashboard.html', context)
+
+
+def user_profile(request, user_id):
+    print(user_id)
+    return redirect('index')

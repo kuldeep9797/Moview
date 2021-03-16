@@ -11,4 +11,5 @@ urlpatterns = [
     path('profile_setup', views.profile_setup, name='profile_setup'),
     path('profile_setup_process', views.profile_setup_process, name='profile_setup_process'),
     path('dashboard', views.dashboard, name='dashboard'),
+    path('<int:user_id>', views.user_profile, name='user_profile'),
 ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FavoriteList, WatchList, Profile
+from .models import FavoriteList, WatchList, Profile, FriendShip
 
 # Register your models here.
 @admin.register(FavoriteList)
@@ -19,4 +19,10 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'user_id']
     search_fields = ('first_name', 'user_id', 'last_name')
     list_filter = ('favorite_genre',)
+    list_per_page = 25
+
+@admin.register(FriendShip)
+class FriendShipAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'user1', 'user2']
+    search_fields = ('user1', 'user2')
     list_per_page = 25

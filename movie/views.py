@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from .models import Movie, Review
 from .options import genre_choices, year_choices
-from accounts.models import WatchList, FavoriteList
+from accounts.models import WatchList, FavoriteList, Profile, FriendShip
 
 # movie page data
 # -------------------------------------------------------
@@ -44,6 +44,18 @@ def movie(request, movie_id):
             else:
                 favorited = False
 
+        your_friends = None
+        if (request.user.is_authenticated):
+            your_friends = FriendShip.objects.filter(user1=request.user)
+
+        user_with_movie = []
+        if (request.user.is_authenticated):
+            for friend in FriendShip.objects.filter(user1=request.user):
+                if (FavoriteList.objects.filter(user=friend.user2.id, movie_id=movie).exists()):
+                    user_with_movie.append(friend.user2.id)
+
+        print(user_with_movie)
+
         context = {
             'movie': movie,
             'reviews': reviews,
@@ -54,6 +66,8 @@ def movie(request, movie_id):
             'user_review': user_review[0],
             'user_given_review': user_given_review,
             'genre_choices': genre_choices,
+            'your_friends': your_friends,
+            'user_with_movie': user_with_movie,
         }
     except Movie.DoesNotExist:
         raise Http404('Movie not found')

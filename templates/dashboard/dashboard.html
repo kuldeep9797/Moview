@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Share your review to the world with the best movie commmunity">
     <meta name="keywords" content="movie review ratings community">
-    <meta name="author" content="Bhardvaj, Kuldeep, Deep, Jenish, Shruti">
+    <meta name="author" content="Bhardvaj, Kuldeep, Darsh, Jenish, Shruti">
 
     <!-- Google font: Roboto -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -97,15 +97,15 @@
                     <a href="#" class="link">view all</a>
                 </div>
                 <div class="movie-grid">
-                    {% if watched_movies %}
-                    {% for fmovie in favorite_movies %}
-                        <a href="{% url 'movie' fmovie.movie_id.id %}" class="card-wrap">
-                            <div class="card">
-                                <img src="{{ fmovie.movie_id.poster.url }}" alt="movie">
-                                <p class="lable-secondary">{{ fmovie.movie_id.name}}</p>
-                            </div>
-                        </a>
-                    {% endfor %}
+                    {% if favorite_movies %}
+                        {% for fmovie in favorite_movies %}
+                            <a href="{% url 'movie' fmovie.movie_id.id %}" class="card-wrap">
+                                <div class="card">
+                                    <img src="{{ fmovie.movie_id.poster.url }}" alt="movie">
+                                    <p class="lable-secondary">{{ fmovie.movie_id.name}}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
                     {% else %}
                         <p class="lable-secondary">No Movies in Favorite List</p>
                     {% endif %}
@@ -165,66 +165,18 @@
                 <br>
                 <p class="lable-primary">Your Friends</p>
                 <div class="firend-list scroll-bar">
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <a href="#"><p class="lable-secondary link">Darsh Parikh</p></a>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
-                    <div class="friend-card">
-                        <img src="img/Darsh.png" alt="User" class="profile-img">
-                        <p class="lable-secondary">Darsh Parikh</p>
-                    </div>
+                    {% if your_friends %}
+                        {% for friend in your_friends %}
+                            <div class="friend-card">
+                                <img src="{% get_profile_image friend.user2.id %}" alt="User" class="profile-img">
+                                <a href="{% url 'user_profile' friend.user2.id %}"><p class="lable-secondary link">{% get_profile_name friend.user2.id %}</p></a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="friend-card">
+                            <p class="lable-secondary">You have no friend</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -353,6 +353,11 @@ nav > .logo > a > img
     display: flex;
 }
 
+.row > .title
+{
+    filter: drop-shadow(0 0 10px var(--dark-color));
+}
+
 .info
 {
     width: 100%;

@@ -46,3 +46,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name;
+
+
+class FriendShip(models.Model):
+    user1 = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='user_from')
+    user2 = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='user_to')
+
+    def __str__(self):
+        return self.user1.username + " friends with " + self.user2.username

@@ -1,4 +1,5 @@
 {% load static %}
+{% load profile_data %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -261,98 +262,24 @@
                     {% endif %}
                     <p class="lable-primary">Friends favorite movie</p>
                     <div class="firend-list scroll-bar">
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
-                        <div class="friend-card">
-                            <img src="{% static 'movie_page/img/Darsh.png' %}" alt="User" class="profile-img">
-                            <p class="lable-secondary">Darsh Parikh</p>
-                        </div>
+                        {% if user.is_authenticated %}
+                            {% if user_with_movie %}
+                                {% for user in user_with_movie %}
+                                    <div class="friend-card">
+                                        <img src="{% get_profile_image user %}" alt="User" class="profile-img">
+                                        <a href="{% url 'user_profile' user %}"><p class="lable-secondary link">{% get_profile_name user %}</p></a>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="friend-card">
+                                    <p class="lable-secondary">No friend has this movie as favorite</p>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="friend-card">
+                                <p class="lable-secondary">Please login to make friends</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

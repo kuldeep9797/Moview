@@ -338,6 +338,7 @@ nav > .logo > a > img
 .row > .user-data
 {
     filter: drop-shadow(0 0 10px var(--dark-color));
+    max-width: 500px;
 }
 /* ---------------------------------------------------------------- */
 

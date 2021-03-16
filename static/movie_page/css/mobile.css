@@ -19,6 +19,11 @@
     }
 }
 
+.card > img 
+{
+    min-width: 120px;
+}
+
 .heading-1
 {
     font-size: 30px;

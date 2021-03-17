@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from .models import Movie, Review
 from .options import genre_choices, year_choices
-from accounts.models import WatchList, FavoriteList, Profile, FriendShip
+from accounts.models import WatchList, FavoriteList, Profile, FriendShip, Notification
 
 # movie page data
 # -------------------------------------------------------
@@ -54,8 +54,6 @@ def movie(request, movie_id):
                 if (FavoriteList.objects.filter(user=friend.user2.id, movie_id=movie).exists()):
                     user_with_movie.append(friend.user2.id)
 
-        print(user_with_movie)
-
         context = {
             'movie': movie,
             'reviews': reviews,
@@ -88,7 +86,6 @@ def add_review(request):
 
     if (Review.objects.filter(movie_id = movie, user = user_id).exists()):
         review = Review.objects.get(movie_id = movie, user = user_id)
-        print("Review Exists: " ,review)
         review.rating = rating
         review.comment = review_text
         review.save()
@@ -141,6 +138,25 @@ def add_remove_favorite(request):
         new_addition.save()
     # Add logic
     return redirect('movie', movie_id = request.POST.get('movie_id'))
+
+
+# Suggest movie to friend
+# -------------------------------------------------------
+def suggest_movie(request):
+    if (request.user.is_authenticated):
+        movie_id = Movie.objects.get(id=request.POST.get('movie_id'))
+        user_id_to = User.objects.get(id=request.POST.get('friend'))
+        user_id_from = request.user
+
+        if (Notification.objects.filter(movie_id = movie_id, user1 = user_id_from, user2 = user_id_to).exists()):
+            messages.error(request, 'You already suggested this movie to this user')
+        else:
+            notification = Notification(movie_id = movie_id, user1 = user_id_from, user2 = user_id_to)
+            notification.save();
+            messages.success(request, 'Suggested successfully.')
+
+    return redirect('movie', movie_id = request.POST.get('movie_id'))
+
 
 
 # browse home page

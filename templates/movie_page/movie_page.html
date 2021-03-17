@@ -329,12 +329,39 @@
     <div class="suggest-modal-container hidden" id="suggest-modal">
         <p class="heading-1">Suggest movie</p>
         <div class="suggest-modal">
-            <form action="#">
-                
+            <form action="{% url 'suggest_movie' %}" class="scroll-bar" id="friend_suggest_form" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+
+                {% if your_friends %}
+                    {% for friend in your_friends %}
+                        <div class="friend-card select">
+                            <div class="friend-card-content" for="friend">
+                                <div class="friend-name">
+                                    <img src="{% get_profile_image friend.user2.id %}" alt="friend">
+                                    <p class="lable-primary">{% get_profile_name friend.user2.id %}</p>
+                                </div>
+                                <input type="radio" name="friend" id="friend" value="{{ friend.user2.id }}" class="radio-input" required>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="friend-card select">
+                        <div class="friend-card-content" for="friend">
+                            <div class="friend-name">
+                                <p class="lable-primary">You don't have friends</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </form>
             <div class="action-button">
                 <p class="btn btn-secondary" id="suggest-modal-close">Cancel</p>
-                <a href="#" class="btn btn-primary">Send</a>
+                {% if your_friends %}
+                    <a href="javascript:{submit_suggest_friend()}" class="btn btn-primary">Send</a>
+                {% else %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Send</a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -382,13 +409,37 @@
             }
         }
 
+
+        // Friend select handler
+        let all_friend_card = document.getElementsByClassName('select');
+        for (let i = 0; i < all_friend_card.length; i++)
+        {
+            all_friend_card[i].addEventListener('click', make_selected)
+        }
+
+        function make_selected(e)
+        {
+            for (let i = 0; i < all_friend_card.length; i++)
+            {
+                all_friend_card[i].classList.remove('selected-border');
+            }
+
+            for (let i = 0; i < e.path.length-2; i++)
+            {
+                if (e.path[i].classList.contains('friend-card'))
+                {
+                    e.path[i].classList.add("selected-border");
+                    e.path[i].children[0].children[1].checked = true;
+                }
+            }
+        }
+
+
         // Open close review modal
         review_modal = document.getElementById('review-modal');
         review_overlay = document.getElementById('review-overlay');
         review_modal_close = document.getElementById('review-modal-close');
         review_modal_open = document.getElementById('review-modal-open');
-        console.log(review_modal);
-        console.log(review_overlay);
 
         function close_review_modal()
         {
@@ -412,8 +463,6 @@
         suggest_overlay = document.getElementById('suggest-overlay');
         suggest_modal_close = document.getElementById('suggest-modal-close');
         suggest_modal_open = document.getElementById('suggest-modal-open');
-        console.log(suggest_modal);
-        console.log(suggest_overlay);
 
         function close_suggest_modal()
         {
@@ -453,6 +502,20 @@
                 {
                     document.getElementById('review').classList.remove('text-error');
                 }
+            }
+        }
+
+        // Submit the suggest friend form
+        function submit_suggest_friend()
+        {
+            let formValid = document.getElementById('friend_suggest_form').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('friend_suggest_form').submit();
+            }
+            else
+            {
             }
         }
 

@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="{% static 'img/Favicon.ico' %}" type="image/x-icon">
 
     <!-- title -->
-    <title>Moview - Search</title>
+    <title>Moview - Dashboard</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -133,34 +133,84 @@
                 <p class="btn btn-primary" id="suggest-modal-open">Search Users</p>
                 <p class="lable-primary">Notifications</p>
                 <div class="noti-list scroll-bar">
-                    <!--! Notification type 1: Suggestion of movie -->
-                    <div class="noti-card unread-border">
-                        <div class="content-wrap">
-                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a> suggested you black widow movie</p>
-                        </div>
-                        <div class="content-action">
-                            <a href="#" class="btn btn-primary">View Movie</a>
-                        </div>
-                    </div>
-                    <div class="noti-card">
-                        <div class="content-wrap">
-                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a> suggested you black widow movie</p>
-                        </div>
-                        <div class="content-action">
-                            <a href="#" class="btn btn-primary">View Movie</a>
-                        </div>
-                    </div>
-                    <!--! Notification type 2: Friend request -->
-                    <div class="noti-card unread-border">
-                        <div class="content-wrap">
-                            <img src="img/Darsh.png" alt="User" class="profile-img">
-                            <p class="lable-secondary"><a href="#" class="text link">Darsh Parikh</a>'s friend request</p>
-                        </div>
-                        <div class="content-action">
-                            <a href="#" class="btn btn-secondary">Decline</a>
-                            <a href="#" class="btn btn-primary">Accept</a>
-                        </div>
-                    </div>
+                    {% if notification %}
+                        {% for noti in notification %}
+                            {% if noti.request_type %}
+                                <div class="noti-card unread-border">
+                                    <div class="content-wrap">
+                                        <img src="{% get_profile_image noti.user1.id %}" alt="User" class="profile-img">
+                                        <p class="lable-secondary"><a href="{% url 'user_profile' noti.user1.id %}" class="text link">{% get_profile_name noti.user1.id %}</a>'s friend request</p>
+                                    </div>
+                                    <div class="content-action">
+                                        <a href="javascript:{
+                                            let form = document.getElementById('friendRequestD{{noti.id}}');
+                                            form.submit();
+                                        }" class="btn btn-secondary">Decline</a>
+                                        <a href="javascript:{
+                                            let form = document.getElementById('friendRequestA{{noti.id}}');
+                                            form.submit();
+                                        }" class="btn btn-primary">Accept</a>
+                                    </div>
+                                    <!-- friend request accept notification action -->
+                                    <form action="{% url 'friend_request_notification_handler' %}" id="friendRequestA{{noti.id}}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="noti_id" value="{{noti.id}}">
+                                        <input type="hidden" name="user_id" value="{{noti.user1.id}}">
+                                        <input type="hidden" name="ad" value="A">
+                                    </form>
+                                    <!-- friend request decline notification action -->
+                                    <form action="{% url 'friend_request_notification_handler' %}" id="friendRequestD{{noti.id}}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="noti_id" value="{{noti.id}}">
+                                        <input type="hidden" name="user_id" value="{{noti.user1.id}}">
+                                        <input type="hidden" name="ad" value="D">
+                                    </form>
+                                </div>
+                            {% else %}
+                                {% if noti.is_read %}
+                                    <div class="noti-card">
+                                        <div class="content-wrap">
+                                            <p class="lable-secondary"><a href="{% url 'user_profile' noti.user1.id %}" class="text link">{% get_profile_name noti.user1.id %}</a> suggested you {{noti.movie_id.name}} movie</p>
+                                        </div>
+                                        <div class="content-action">
+                                            <a href="javascript:{
+                                                let form = document.getElementById('gotomovie{{noti.id}}');
+                                                form.submit();
+                                            }" class="btn btn-primary">View Movie</a>
+                                        </div>
+                                        <!-- movie suggestion notification action -->
+                                        <form action="{% url 'movie_notification_handler' %}" id="gotomovie{{noti.id}}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="noti_id" value="{{noti.id}}">
+                                            <input type="hidden" name="movie_id" value="{{noti.movie_id.id}}">
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="noti-card unread-border">
+                                        <div class="content-wrap">
+                                            <p class="lable-secondary"><a href="{% url 'user_profile' noti.user1.id %}" class="text link">{% get_profile_name noti.user1.id %}</a> suggested you {{noti.movie_id.name}} movie</p>
+                                        </div>
+                                        <div class="content-action">
+                                            <a href="javascript:{
+                                                let form = document.getElementById('gotomovie{{noti.id}}');
+                                                form.submit();
+                                            }" class="btn btn-primary">View Movie</a>
+                                        </div>
+                                        <!--  movie suggestion notification action -->
+                                        <form action="{% url 'movie_notification_handler' %}" id="gotomovie{{noti.id}}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="noti_id" value="{{noti.id}}">
+                                            <input type="hidden" name="movie_id" value="{{noti.movie_id.id}}">
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        < class="noti-card">
+                            <p class="lable-secondary">You don't have any notification</p>
+                        </>
+                    {% endif %}
                 </div>
                 <br>
                 <p class="lable-primary">Your Friends</p>

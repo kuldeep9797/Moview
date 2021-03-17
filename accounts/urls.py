@@ -12,4 +12,7 @@ urlpatterns = [
     path('profile_setup_process', views.profile_setup_process, name='profile_setup_process'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('<int:user_id>', views.user_profile, name='user_profile'),
+    path('send_friend_request', views.send_friend_request, name='send_friend_request'),
+    path('movie_notification_handler', views.movie_notification_handler, name='movie_notification_handler'),
+    path('friend_request_notification_handler', views.friend_request_notification_handler, name='friend_request_notification_handler'),
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from movie.options import genre_choices, year_choices
-from .models import WatchList, FavoriteList, Profile, FriendShip
+from .models import WatchList, FavoriteList, Profile, FriendShip, Notification
 from movie.models import Gerne
 
 
@@ -155,16 +155,110 @@ def dashboard(request):
     your_friends = FriendShip.objects.filter(user1=user_id)
     friend_count = FriendShip.objects.filter(user1=user_id).count()
 
+    notification = Notification.objects.filter(user2=user_id).order_by('-date')
+
     context = {
         "favorite_movies" : favorite_movies,
         "watched_movies" : watched_movies,
         "your_friends": your_friends,
         "friend_count": friend_count,
         'genre_choices': genre_choices,
+        "notification": notification,
     }
     return render(request, 'dashboard/dashboard.html', context)
 
 
 def user_profile(request, user_id):
-    print(user_id)
-    return redirect('index')
+    if request.user.is_authenticated:
+        if request.user.id == user_id:
+            return redirect('dashboard')
+        else:
+            favorite_movies = FavoriteList.objects.filter(user = user_id)[:4]
+            watched_movies = WatchList.objects.filter(user = user_id)[:4]
+
+            friend_count = FriendShip.objects.filter(user1=user_id).count()
+            favorite_count = FavoriteList.objects.filter(user = user_id).count()
+
+            friends = FriendShip.objects.filter(user1=user_id)
+
+            already_friend = False
+            if (FriendShip.objects.filter(user1 = user_id, user2=request.user)):
+                already_friend = True
+
+            request_sent = False
+            if (Notification.objects.filter(request_type=True, user1=request.user.id, user2=user_id)):
+                request_sent = True
+
+            context = {
+                'favorite_movies' : favorite_movies,
+                'watched_movies' : watched_movies,
+                'friend_count' : friend_count,
+                'favorite_count': favorite_count,
+                'friends': friends,
+                'user_id': user_id,
+                'already_friend': already_friend,
+                'request_sent': request_sent
+            }
+
+            return render(request, 'user_page/user_page.html', context)
+    else:
+        return redirect('login')
+
+
+def send_friend_request(request):
+    if request.method == 'POST':
+        if (request.user.is_authenticated):
+            user_id = User.objects.filter(id=request.POST.get('user_id'))[0]
+            user_logged_id = request.user
+            if (FriendShip.objects.filter(user1=user_id, user2=user_logged_id)):
+                FriendShip.objects.filter(user1=user_id, user2=user_logged_id).delete()
+                FriendShip.objects.filter(user2=user_id, user1=user_logged_id).delete()
+                messages.error(request, "Now you are now not friends with " + User.objects.get(id=user_id).username)
+            else:
+                if (Notification.objects.filter(request_type=True, user1=user_logged_id, user2=user_id)):
+                    messages.error(request, "You already sent friend request.")
+                    return redirect('user_profile', user_id = request.POST.get('user_id'))
+                else:
+                    notification = Notification(request_type=True, user1=user_logged_id, user2=user_id)
+                    notification.save()
+        else:
+            return redirect('login')
+    return redirect('user_profile', user_id = request.POST.get('user_id'))
+
+
+def movie_notification_handler(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('movie_id');
+        noti_id = request.POST.get('noti_id');
+
+        notification = Notification.objects.get(id=noti_id)
+        notification.is_read = True
+        notification.save()
+        return redirect('movie', movie_id = request.POST.get('movie_id'))
+    else:
+        return redirect('dashboard')
+
+
+def friend_request_notification_handler(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id');
+        noti_id = request.POST.get('noti_id');
+        ad = request.POST.get('ad');
+
+        if (ad == 'A'):
+            print("Accept")
+            notification = Notification.objects.get(id=noti_id)
+            if (FriendShip.objects.filter(user1=user_id, user2=request.user.id)):
+                pass
+            else:
+                friend = FriendShip(user1=User.objects.get(id=user_id), user2=request.user)
+                friend.save()
+                friend = FriendShip(user2=User.objects.get(id=user_id), user1=request.user)
+                friend.save()
+            notification.delete()
+            messages.success(request, "You are now friends with " + User.objects.get(id=user_id).username)
+        else:
+            print("Decline")
+            notification = Notification.objects.get(id=noti_id)
+            notification.delete()
+    return redirect('dashboard')

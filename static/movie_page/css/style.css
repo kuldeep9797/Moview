@@ -201,7 +201,7 @@ ul
 
 .card > img
 {
-    max-width: 175px;
+    width: 175px;
     display: inline-block;
 }
 

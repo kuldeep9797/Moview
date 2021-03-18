@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 from movie.options import genre_choices, year_choices
 from .models import WatchList, FavoriteList, Profile, FriendShip, Notification
 from movie.models import Gerne
+from accounts.templatetags.profile_data import get_profile_image, get_profile_name, get_profile_genre
 
 
 # Login page
@@ -196,6 +198,7 @@ def user_profile(request, user_id):
                 'favorite_count': favorite_count,
                 'friends': friends,
                 'user_id': user_id,
+                'user': User.objects.get(id=user_id),
                 'already_friend': already_friend,
                 'request_sent': request_sent
             }
@@ -262,3 +265,37 @@ def friend_request_notification_handler(request):
             notification = Notification.objects.get(id=noti_id)
             notification.delete()
     return redirect('dashboard')
+
+
+def user_list(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        name = request.POST.get('name')
+        data = []
+
+        names = name.split()
+        users = User.objects.all()
+
+        for name in names:
+            users_for_name = users.filter(username__icontains=name)
+
+            for user in users_for_name:
+                if (Profile.objects.filter(user_id=user.id).exists()):
+                    user = {
+                        'id': user.id,
+                        'user_name': get_profile_name(user_id=user.id),
+                        'user_photo_url': get_profile_image(user_id=user.id)
+                    }
+                    if (user in data) or (user['id'] == request.user.id):
+                        print(name, "Already exits")
+                    else:
+                        print(name, "Added in data")
+                        data.append(user)
+                else:
+                    print(name, "User don't have profile data")
+
+        if (data):
+            return JsonResponse(data, safe=False)
+        else:
+            return JsonResponse("None", safe=False)
+    else:
+        return redirect('login')

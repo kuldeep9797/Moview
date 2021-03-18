@@ -15,4 +15,5 @@ urlpatterns = [
     path('send_friend_request', views.send_friend_request, name='send_friend_request'),
     path('movie_notification_handler', views.movie_notification_handler, name='movie_notification_handler'),
     path('friend_request_notification_handler', views.friend_request_notification_handler, name='friend_request_notification_handler'),
+    path('user_list', views.user_list, name='user_list'),
 ]

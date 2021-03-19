@@ -25,7 +25,7 @@ SECRET_KEY = '^11=*a@$5#pftmawhcp&uqajkds@ch5$y9qp&(+n+8b9m7*(al'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','www.moview.ga', 'moview.ga','20.39.35.238','localhost', 'moview.eastus.cloudapp.azure.com', 'www.moview.eastus.cloudapp.azure.com']
+ALLOWED_HOSTS = ['127.0.0.1','www.moview.ga', 'moview.ga','104.211.59.21','localhost', 'moview.eastus.cloudapp.azure.com', 'www.moview.eastus.cloudapp.azure.com']
 
 
 # Application definition

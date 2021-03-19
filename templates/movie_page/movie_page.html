@@ -119,7 +119,7 @@
             <div class="row">
                 <div class="col info">
                     <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
-                    <p class="lable-primary">Genre: <span class="lable-secondary">
+                    <p class="lable-primary">Genre: <span class="lable-secondary" id="movie_genre">
                         {% for genre in movie.gerne_ids.all %}
                             {% for key,value in genre_choices.items %}
                                 {% if key == genre.name %}
@@ -538,6 +538,21 @@
                 document.getElementById('favorite_list').submit();
             }
         }
+
+        // Delete the specified position in the string
+        function remove_character(str, char_pos) 
+        {
+            part1 = str.substring(0, char_pos);
+            part2 = str.substring(char_pos + 1, str.length);
+            return (part1 + part2);
+        }
+
+
+        // removie last commas
+        genre_element = document.getElementById('movie_genre');
+        let genre_list = genre_element.innerHTML;
+        genre_list = remove_character(genre_list, genre_list.lastIndexOf(","));
+        genre_element.innerHTML = genre_list;
 
     </script>
 </body>

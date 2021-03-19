@@ -216,7 +216,7 @@ def send_friend_request(request):
             if (FriendShip.objects.filter(user1=user_id, user2=user_logged_id)):
                 FriendShip.objects.filter(user1=user_id, user2=user_logged_id).delete()
                 FriendShip.objects.filter(user2=user_id, user1=user_logged_id).delete()
-                messages.error(request, "Now you are now not friends with " + User.objects.get(id=user_id).username)
+                messages.error(request, "You have unfriended " + User.objects.get(id=user_id.id).username)
             else:
                 if (Notification.objects.filter(request_type=True, user1=user_logged_id, user2=user_id)):
                     messages.error(request, "You already sent friend request.")

@@ -74,7 +74,7 @@
                 <img src="{% get_profile_image user_id %}" alt="Profile">
                 <div class="col user-data">
                     <p class="heading-2">{% get_profile_name user_id %}</p>
-                    <p class="lable-primary">@{{ user.username }}</p>
+                    <p class="lable-secondary">@{{ user.username }}</p>
                     <p class="lable-secondary"><span class="lable-primary">Favorite Movies: </span>{{favorite_count}}</p>
                     <p class="lable-secondary"><span class="lable-primary">Friends: </span>{{friend_count}}</p>
                     {% if already_friend %}

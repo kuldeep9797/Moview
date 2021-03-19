@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import Movie, Review
 from .options import genre_choices, year_choices
 from accounts.models import WatchList, FavoriteList, Profile, FriendShip, Notification
+from accounts.templatetags.profile_data import get_profile_image, get_profile_name, get_profile_genre
 
 # movie page data
 # -------------------------------------------------------
@@ -151,9 +152,28 @@ def suggest_movie(request):
         if (Notification.objects.filter(movie_id = movie_id, user1 = user_id_from, user2 = user_id_to).exists()):
             messages.error(request, 'You already suggested this movie to this user')
         else:
-            notification = Notification(movie_id = movie_id, user1 = user_id_from, user2 = user_id_to)
-            notification.save();
-            messages.success(request, 'Suggested successfully.')
+            movie_genre = movie_id.gerne_ids.all()
+            movie_genres = []
+            for genre in movie_genre:
+                movie_genres.append(genre.name)
+            
+            user_to_genres = get_profile_genre(user_id=user_id_to.id)
+
+            print("Friend's genres", user_to_genres)
+            print("Movie's genres", movie_genres)
+            # ['action', 'adventure', 'animation', 'crime', 'horror', 'sci-fi', 'mystery']
+
+            add_notification_flag = False
+            for genre in movie_genres:
+                if (genre in user_to_genres):
+                    add_notification_flag = True
+
+            if (add_notification_flag):
+                notification = Notification(movie_id = movie_id, user1 = user_id_from, user2 = user_id_to)
+                notification.save();
+                messages.success(request, 'Suggested successfully.')
+            else:
+                messages.error(request, "Your friend usualy doesn't like movies with this type of genre.")
 
     return redirect('movie', movie_id = request.POST.get('movie_id'))
 

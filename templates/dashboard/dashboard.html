@@ -72,8 +72,9 @@
                 <img src="{% get_profile_image user.id %}" alt="Profile">
                 <div class="col user-data">
                     <p class="heading-2">{% get_profile_name user.id %}</p>
+                    <p class="lable-secondary">@{{user.username}}</p>
                     {% get_profile_genre user.id as favorite_genre %}
-                    <p class="lable-secondary"> <span class="lable-primary">Favorite Genres: </span>
+                    <p class="lable-secondary" id="favorite_genre"> <span class="lable-primary">Favorite Genres: </span>
                         {% for genre in favorite_genre %}
                             {% for key,value in genre_choices.items %}
                                 {% if key == genre %}
@@ -130,7 +131,7 @@
                 </div>
             </div>
             <div class="col friends-column">
-                <p class="btn btn-primary" id="suggest-modal-open">Search Users</p>
+                <p class="btn btn-primary" id="search-modal-open">Search Users</p>
                 <p class="lable-primary">Notifications</p>
                 <div class="noti-list scroll-bar">
                     {% if notification %}
@@ -237,6 +238,31 @@
         <div class="horizontal-line"></div>
     </div>
 
+    <!-- Search modal -->
+    <div class="suggest-modal-container hidden" id="search-modal">
+        <p class="heading-1">Search User</p>
+        <div class="suggest-modal">
+            <div class="name-input">
+                <p class="lable-primary">Type username here</p>
+                <input type="text" name="name" id="name" class="text-input">
+                <p class="btn btn-primary" id="search_value_button">Search</p>
+            </div>
+            <section class="scroll-bar" id="user_list_container">
+                <a href="#"class="friend-card select">
+                    <div class="friend-card-content" for="friend">
+                        <div class="friend-name">
+                            <p class="lable-primary">Result will be here</p>
+                        </div>
+                    </div>
+                </a>
+            </section>
+            <div class="action-button">
+                <p class="btn btn-secondary" id="search-modal-close">Cancel</p>
+            </div>
+        </div>
+    </div>
+    <div class="suggest-background-overlay hidden" id="search-overlay"></div>
+
     <!-- Footer -->
     <div class="container">
         <div class="footer">
@@ -251,5 +277,139 @@
     </div>
 
     {% include 'partials/_messages.html' %}
+
+    <script>
+        // Open close suggest friend modal
+        let search_modal = document.getElementById('search-modal');
+        let search_overlay = document.getElementById('search-overlay');
+        let search_modal_close = document.getElementById('search-modal-close');
+        let search_modal_open = document.getElementById('search-modal-open');
+
+        function close_search_modal()
+        {
+            search_modal.classList.add('hidden');
+            search_overlay.classList.add('hidden');
+        }
+
+        function open_search_modal()
+        {
+            search_modal.classList.remove('hidden');
+            search_overlay.classList.remove('hidden');
+        }
+
+        search_modal_open.addEventListener('click', open_search_modal);
+        search_overlay.addEventListener('click', close_search_modal);
+        search_modal_close.addEventListener('click', close_search_modal);
+
+
+        // Search button action
+        let search_button = document.getElementById('search_value_button');
+
+        search_button.addEventListener('click', list_user_call);
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function list_user_call()
+        {
+            let name_value = document.getElementById('name').value;
+
+            if (!name_value)
+            {
+                name_value = null;
+                document.getElementById('user_list_container').innerHTML = `<a href="#"class="friend-card select">
+                                                                                <div class="friend-card-content" for="friend">
+                                                                                    <div class="friend-name">
+                                                                                        <p class="lable-primary">Please type username in field</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>`;
+            }
+            else
+            {
+                console.log(name_value)
+
+                let xhr = new XMLHttpRequest();
+                csrf_token = getCookie('csrftoken')
+
+                xhr.open("POST", "{% url 'user_list' %}", true);
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                xhr.onload = function() {
+                    if (this.status === 200)
+                    {
+                        let users = JSON.parse(this.responseText);
+                        if (users === "None")
+                        {
+                            document.getElementById('user_list_container').innerHTML = `<a href="#"class="friend-card select">
+                                                                                            <div class="friend-card-content" for="friend">
+                                                                                                <div class="friend-name">
+                                                                                                    <p class="lable-primary">No user found</p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </a>`;
+                        }
+                        else
+                        {
+                            html = ""
+                            for ( let i in users)
+                            {
+                                html += `<a href="/accounts/${users[i].id}" class="friend-card select">
+                                            <div class="friend-card-content" for="friend">
+                                                <div class="friend-name">
+                                                    <img src="${users[i].user_photo_url}" alt="friend">
+                                                    <p class="lable-primary">${users[i].user_name}</p>
+                                                </div>
+                                            </div>
+                                        </a>`;
+                            }
+                            document.getElementById('user_list_container').innerHTML = html;
+                        }
+                    }
+                    else if (this.status === 404)
+                    {
+                        console.log("Not found");
+                        document.getElementById('user_list_container').innerHTML = `<a href="#"class="friend-card select">
+                                                                                        <div class="friend-card-content" for="friend">
+                                                                                            <div class="friend-name">
+                                                                                                <p class="lable-primary">No user found</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </a>`;
+                    }
+                }
+
+                xhr.send("name=" + name_value)
+            }
+        }
+
+        function remove_character(str, char_pos) 
+        {
+            part1 = str.substring(0, char_pos);
+            part2 = str.substring(char_pos + 1, str.length);
+            return (part1 + part2);
+        }
+
+
+        // removie last commas
+        genre_element = document.getElementById('favorite_genre');
+        let genre_list = genre_element.innerHTML;
+        genre_list = remove_character(genre_list, genre_list.lastIndexOf(","));
+        genre_element.innerHTML = genre_list;
+    </script>
 </body>
 </html>

@@ -112,3 +112,21 @@
     width: 100%;
 }
 /* ------------------------------------------------------------------------ */
+
+
+/** Suggest movie modal------------------------------------------------- */
+.suggest-modal-container
+{
+    width: 90%;
+}
+
+.suggest-modal-container > .suggest-modal > .name-input > p.btn
+{
+    margin-bottom: 1rem;
+}
+
+.suggest-modal-container > .suggest-modal > .name-input > .text-input
+{
+    margin-right: 0rem;
+}
+/* ------------------------------------------------------------- */

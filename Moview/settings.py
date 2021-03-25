@@ -154,7 +154,7 @@ MESSAGE_TAGS = {
 # PWA Settings for the django application
 PWA_APP_NAME = 'Moview'
 PWA_APP_DESCRIPTION = "Moview PWA"
-PWA_APP_THEME_COLOR = 'default'
+# PWA_APP_THEME_COLOR = 'default'
 PWA_APP_BACKGROUND_COLOR = '#222222'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'

@@ -2,7 +2,15 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- Loading all data for PWA application -->
+{% load pwa %}
+<link rel="manifest" href="manifest.json">
+
 <head>
+    <!-- Loading all data for PWA application -->
+    {% progressive_web_app_meta %}
+    
     <!-- metadata -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

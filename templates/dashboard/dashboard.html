@@ -96,7 +96,7 @@
             <div class="col movie-column">
                 <div class="subtitle-wrap">
                     <p class="lable-primary subtitle">Favorite Movies</p>
-                    <a href="#" class="link">view all</a>
+                    <a href="{% url 'favorite_movie_list' %}" class="link">view all</a>
                 </div>
                 <div class="movie-grid">
                     {% if favorite_movies %}
@@ -114,7 +114,7 @@
                 </div>
                 <div class="subtitle-wrap">
                     <p class="lable-primary subtitle">Watched Movies</p>
-                    <a href="#" class="link">view all</a>
+                    <a href="{% url 'watch_movie_list' %}" class="link">view all</a>
                 </div>
                 <div class="movie-grid">
                     {% if watched_movies %}

@@ -143,7 +143,6 @@
                             {% endif %}
                         </div>
                         <br>
-                        <p class="lable-primary">Genre: <span class="lable-secondary">Action, Sci-fi,</span></p>
                         <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
                         <p class="lable-primary">Genre: <span class="lable-secondary">
                             {% for genre in movie.gerne_ids.all %}
@@ -158,6 +157,7 @@
                 </a>
             {% endfor %}
         </div>
+    </div>
 
     <!-- Horizontal line -->
     <div class="container line">

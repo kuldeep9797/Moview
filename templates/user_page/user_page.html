@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="{% static 'img/Favicon.ico' %}" type="image/x-icon">
 
     <!-- title -->
-    <title>Moview - Search</title>
+    <title>Moview - User</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -97,7 +97,7 @@
             <div class="col movie-column">
                 <div class="subtitle-wrap">
                     <p class="lable-primary subtitle">Favorite Movies</p>
-                    <a href="#" class="link">view all</a>
+                    <a href="{% url 'user_favorite_movie_list' user_id %}" class="link">view all</a>
                 </div>
                 <div class="movie-grid">
                     {% if favorite_movies %}
@@ -115,7 +115,7 @@
                 </div>
                 <div class="subtitle-wrap">
                     <p class="lable-primary subtitle">Watched Movies</p>
-                    <a href="#" class="link">view all</a>
+                    <a href="{% url 'user_watch_movie_list' user_id %}" class="link">view all</a>
                 </div>
                 <div class="movie-grid">
                     {% if watched_movies %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% load profile_data %}
 {% load avg_rating %}
 
 <!DOCTYPE html>
@@ -20,15 +21,15 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{% static 'movie_list/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'movie_list/css/tablet.css' %}" media="screen and (max-width: 850px)">
-    <link rel="stylesheet" href="{% static 'movie_list/css/mobile.css' %}" media="screen and (max-width: 600px)">
+    <link rel="stylesheet" href="{% static 'dashboard/css/list_style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/list_tablet.css' %}" media="screen and (max-width: 800px)">
+    <link rel="stylesheet" href="{% static 'dashboard/css/list_mobile.css' %}" media="screen and (max-width: 600px)">
 
     <!-- Moview Icon -->
     <link rel="shortcut icon" href="{% static 'img/Favicon.ico' %}" type="image/x-icon">
 
     <!-- title -->
-    <title>Moview - In Theaters</title>
+    <title>Moview - Dashboard</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -40,7 +41,7 @@
                 </div>
                 <div class="login-register">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="btn btn-primary dashboard">DASHBOARD</a>
+                        <a href="{% url 'browse' %}" class="btn btn-primary dashboard">BROWSE MOVIES</a>
                         <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-secondary logout">LOGOUT</a>
                         <form action="{% url 'logout_process' %}" id="logout" method="POST">
                             {% csrf_token %}
@@ -57,53 +58,46 @@
 
         <!-- Main-hero -->
         <div class="hero">
-            <img src="{% static 'img/browse_background.jpg' %}" alt="Background Image">
+            <img src="{% static 'img/dashboard_background.jpg'%}" alt="Cover Image">
         </div>
     </div>
 
+
+
     <!-- Search Title -->
     <div class="container">
-        <div class="search-title">
-            <a href="{% url 'browse' %}"><h1 class="heading-1">Browse Movies</h1></a>
+        <div class="dashboard-title">
+            <!-- <h1 class="heading-1">Dashboard</h1> -->
             <div class="row">
-                <form action="{% url 'browse_result' %}" class="form-row" id="search-form" method="GET">
-                    {% csrf_token %}
-                    <div class="name-input">
-                        <p class="lable-primary">Name</p>
-                        <input type="text" name="name" id="name" class="text-input">
-                    </div>
-                    <div class="release-input">
-                        <p class="lable-primary">Release Year</p>
-                        <select id="years" name="years" class="text-input scroll-bar">
-                            <option selected="true" disabled="disabled">Select year</option>
-                            {% for key,value in year_choices.items %}
-                                <option value="{{ key }}">{{ value }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="genre-input">
-                        <p class="lable-primary">Genre</p>
-                        <select id="genres" name="genres" class="text-input scroll-bar">
-                            <option selected="true" disabled="disabled">Select genre</option>
+                {% get_profile_image user.id as user_data %}
+                <img src="{% get_profile_image user.id %}" alt="Profile">
+                <div class="col user-data">
+                    <p class="heading-2">{% get_profile_name user.id %}</p>
+                    <p class="lable-secondary">@{{user.username}}</p>
+                    {% get_profile_genre user.id as favorite_genre %}
+                    <p class="lable-secondary" id="favorite_genre"> <span class="lable-primary">Favorite Genres: </span>
+                        {% for genre in favorite_genre %}
                             {% for key,value in genre_choices.items %}
-                                <option value="{{ key }}">{{ value }}</option>
+                                {% if key == genre %}
+                                    {{value}},
+                                {% endif %}
                             {% endfor %}
-                        </select>
-                    </div>
-                    <a href="javascript:{search()}" class="btn btn-primary search-button" id="search">Search</a>
-                </form>
+                        {% endfor %}
+                    </p>
+                    <p class="lable-secondary"><span class="lable-primary">Number of friends: </span>{{ friend_count }}</p>
+                </div>
             </div>
         </div>
     </div>
 
     <!--! Search Result - Home-->
     <div class="container">
-        <p class="lable-primary subtitle">Currently In Theaters</p>
+        <p class="lable-primary subtitle">Your Watched Movies</p>
         <div class="movie-grid">
-            {% for movie in trending_movies %}
-                <a href="{% url 'movie' movie.id %}" class="card-wrap">
+            {% for wmovie in watch_movies %}
+                <a href="{% url 'movie' wmovie.movie_id.id %}" class="card-wrap">
                     <div class="card">
-                        <img src="{{ movie.poster.url }}" alt="movie">
+                        <img src="{{ wmovie.movie_id.poster.url }}" alt="movie">
                         <!-- <p class="lable-secondary">Free Guy</p> -->
                     </div>
                     <div class="card-details">
@@ -112,10 +106,10 @@
                             <div class="horizontal-line"></div>
                         </div>
 
-                        <p class="lable-primary">{{ movie.name}}</p>
+                        <p class="lable-primary">{{ wmovie.movie_id.name}}</p>
                         <br>
                         <div class="movie-rating">
-                            {% avg_movie_rating movie.id as rating_avg %}
+                            {% avg_movie_rating wmovie.movie_id.id as rating_avg %}
                             {% if rating_avg >= 1 %}
                                 <i class="fas fa-star star star-active"></i>
                             {% else %}
@@ -143,10 +137,9 @@
                             {% endif %}
                         </div>
                         <br>
-                        <p class="lable-primary">Genre: <span class="lable-secondary">Action, Sci-fi,</span></p>
-                        <p class="lable-primary">Release Year: <span class="lable-secondary">{{ movie.release_year }}</span></p>
+                        <p class="lable-primary">Release Year: <span class="lable-secondary">{{ wmovie.movie_id.release_year }}</span></p>
                         <p class="lable-primary">Genre: <span class="lable-secondary">
-                            {% for genre in movie.gerne_ids.all %}
+                            {% for genre in wmovie.movie_id.gerne_ids.all %}
                                 {% for key,value in genre_choices.items %}
                                     {% if key == genre.name %}
                                         {{value}},
@@ -158,12 +151,11 @@
                 </a>
             {% endfor %}
         </div>
-    </div>
 
     <!-- Horizontal line -->
-    < class="container line">
+    <div class="container line">
         <div class="horizontal-line"></div>
-    </>
+    </div>
 
     <!-- Footer -->
     <div class="container">
@@ -180,31 +172,7 @@
 
     {% include 'partials/_messages.html' %}
 
-    <!-- Scripts -->
     <script>
-        // Search form
-        function search()
-        {
-            let formValid = document.getElementById('search-form').checkValidity();
-
-            if (formValid == true)
-            {
-                document.getElementById('search-form').submit();
-            }
-            else
-            {
-                let reviewValid = document.getElementById('review').checkValidity();
-
-                if (reviewValid == false)
-                {
-                    document.getElementById('review').classList.add('text-error');
-                }
-                else
-                {
-                    document.getElementById('review').classList.remove('text-error');
-                }
-            }
-        }
     </script>
 </body>
 </html>

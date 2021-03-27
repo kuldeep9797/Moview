@@ -1,0 +1,102 @@
+/** Navbar--------------------------------------------------------- */
+.register
+{
+    display: none;
+}
+
+.logout
+{
+    display: none;
+}
+/* --------------------------------------------------------- */
+
+/** Utility-------------------------------------------------------------- */
+@media(max-width: 400px)
+{
+    .container
+    {
+        padding: 0 0.5rem;
+    }
+}
+
+.heading-1
+{
+    font-size: 30px;
+    line-height: 1;
+}
+
+.star
+{
+    font-size: 1rem;
+}
+
+.text-input
+{
+    width: 100%;
+}
+
+
+.radio-input
+{
+    margin-right: 0.1rem;
+    width: 1rem;
+    height: 1rem;
+}
+/* -------------------------------------------------------------- */
+
+/** Search Title------------------------------------------------------ */
+.dashboard-title
+{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: -8.5rem;
+}
+
+.row
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.row > .user-data
+{
+    text-align: center;
+}
+
+.row > img
+{
+    max-width: 120px;
+    margin-right: 0;
+    margin-bottom: 2rem;
+}
+
+.dashboard-content
+{
+    flex-direction: column;
+    padding-bottom: 1rem;
+}
+/* ---------------------------------------------------------------- */
+
+/** hero---------------------------------------------------------------------- */
+.hero
+{
+    height: 15rem;
+}
+/* ---------------------------------------------------------------------- */
+
+/*! Search result-Home ------------------------------------------------------ */
+.subtitle
+{
+    text-align: center;
+}
+/* ------------------------------------------------------------------------ */
+
+/*! Search result-Output ------------------------------------------------------ */
+.movie-grid
+{
+    grid-template-columns: 1fr;
+    align-items: center;
+}
+/* ------------------------------------------------------------------------ */

@@ -206,6 +206,40 @@ def dashboard(request):
     return render(request, 'dashboard/dashboard.html', context)
 
 
+# Users favorite movie
+# -----------------------------------------------------
+def favorite_movie_list(request):
+    favorite_movies = FavoriteList.objects.filter(user = request.user)
+    profile = Profile.objects.get(user_id=request.user)
+    friend_count = FriendShip.objects.filter(user1=request.user).count()
+
+    context = {
+        "favorite_movies": favorite_movies,
+        'genre_choices': genre_choices,
+        "friend_count": friend_count,
+    }
+
+    return render(request, 'dashboard/favorite_list.html', context)
+
+
+# Users watched movies
+# -----------------------------------------------------
+def watch_movie_list(request):
+    watch_movies = WatchList.objects.filter(user = request.user)
+    profile = Profile.objects.get(user_id=request.user)
+    friend_count = FriendShip.objects.filter(user1=request.user).count()
+
+    context = {
+        "watch_movies": watch_movies,
+        'genre_choices': genre_choices,
+        "friend_count": friend_count,
+    }
+
+    return render(request, 'dashboard/watch_list.html', context)
+
+
+# User page
+# -----------------------------------------------------
 def user_profile(request, user_id):
     if request.user.is_authenticated:
         if request.user.id == user_id:
@@ -244,6 +278,62 @@ def user_profile(request, user_id):
         return redirect('login')
 
 
+# Users favorite movie
+# -----------------------------------------------------
+def user_favorite_movie_list(request, user_id):
+    favorite_movies = FavoriteList.objects.filter(user = user_id)
+    friend_count = FriendShip.objects.filter(user1=user_id).count()
+    favorite_count = FavoriteList.objects.filter(user = user_id).count()
+
+    already_friend = False
+    if (FriendShip.objects.filter(user1 = user_id, user2=request.user)):
+        already_friend = True
+
+    request_sent = False
+    if (Notification.objects.filter(request_type=True, user1=request.user.id, user2=user_id)):
+        request_sent = True
+
+    context = {
+        "favorite_movies": favorite_movies,
+        'user_id': user_id,
+        'user': User.objects.get(id=user_id),
+        'friend_count' : friend_count,
+        'favorite_count': favorite_count,
+        'already_friend': already_friend,
+        'request_sent': request_sent,
+    }
+    return render(request, 'user_page/user_favorite_list.html', context)
+
+
+# Users watched movies
+# -----------------------------------------------------
+def user_watch_movie_list(request, user_id):
+    watch_movies = WatchList.objects.filter(user = user_id)
+    friend_count = FriendShip.objects.filter(user1=user_id).count()
+    favorite_count = FavoriteList.objects.filter(user = user_id).count()
+
+    already_friend = False
+    if (FriendShip.objects.filter(user1 = user_id, user2=request.user)):
+        already_friend = True
+
+    request_sent = False
+    if (Notification.objects.filter(request_type=True, user1=request.user.id, user2=user_id)):
+        request_sent = True
+
+    context = {
+        "watch_movies": watch_movies,
+        'user_id': user_id,
+        'user': User.objects.get(id=user_id),
+        'friend_count' : friend_count,
+        'favorite_count': favorite_count,
+        'already_friend': already_friend,
+        'request_sent': request_sent,
+    }
+    return render(request, 'user_page/user_watch_list.html', context)
+
+
+# send friend request process
+# -----------------------------------------------------
 def send_friend_request(request):
     if request.method == 'POST':
         if (request.user.is_authenticated):
@@ -265,6 +355,8 @@ def send_friend_request(request):
     return redirect('user_profile', user_id = request.POST.get('user_id'))
 
 
+# Handle action for movie notification
+# -----------------------------------------------------
 def movie_notification_handler(request):
     if request.method == 'POST':
         movie_id = request.POST.get('movie_id');
@@ -278,6 +370,8 @@ def movie_notification_handler(request):
         return redirect('dashboard')
 
 
+# handle action for friend notification
+# -----------------------------------------------------
 def friend_request_notification_handler(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id');
@@ -303,6 +397,8 @@ def friend_request_notification_handler(request):
     return redirect('dashboard')
 
 
+# Search User handler
+# -----------------------------------------------------
 def user_list(request):
     if request.method == 'POST' and request.user.is_authenticated:
         name = request.POST.get('name')

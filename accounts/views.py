@@ -140,6 +140,39 @@ def profile_setup_process(request):
     return redirect('dashboard')
 
 
+# Profile setup process logic
+#-------------------------------------------------------
+def profile_update_process(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        profile = Profile.objects.get(user_id=request.user.id)
+
+        # Update Firstname and lastname
+        firstName = request.POST.get('firstname')
+        lastName = request.POST.get('lastname')
+        profile.first_name = firstName
+        profile.last_name = lastName
+        profile.save()
+
+        # Update profile image
+        myfile = request.FILES['profile_image'] if 'profile_image' in request.FILES else None
+        if (myfile):
+            profile.profile_photo = myfile
+            profile.save()
+        
+        # Update favorite genres
+        genres = request.POST.getlist('genre')
+        favorite_genre = []
+        for genre in genres:
+            favorite_genre.append(Gerne.objects.get(name=genre))
+        profile.favorite_genre.clear()
+        profile.favorite_genre.add(*favorite_genre)
+        profile.save()
+
+    #Messages
+    messages.success(request, 'Your profile updated successfully.')
+    return redirect('dashboard')
+
+
 # Dashboard page
 # -----------------------------------------------------
 def dashboard(request):
@@ -159,6 +192,8 @@ def dashboard(request):
 
     notification = Notification.objects.filter(user2=user_id).order_by('-date')
 
+    profile = Profile.objects.get(user_id=request.user)
+
     context = {
         "favorite_movies" : favorite_movies,
         "watched_movies" : watched_movies,
@@ -166,6 +201,7 @@ def dashboard(request):
         "friend_count": friend_count,
         'genre_choices': genre_choices,
         "notification": notification,
+        "profile": profile,
     }
     return render(request, 'dashboard/dashboard.html', context)
 

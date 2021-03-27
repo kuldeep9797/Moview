@@ -84,6 +84,7 @@
                         {% endfor %}
                     </p>
                     <p class="lable-secondary"><span class="lable-primary">Number of friends: </span>{{ friend_count }}</p>
+                    <p class="lable-secondary link" id="profile-modal-open"><i class="fas fa-user-edit"></i>&nbsp; Profile Settings</p>
                 </div>
             </div>
         </div>
@@ -263,6 +264,61 @@
     </div>
     <div class="suggest-background-overlay hidden" id="search-overlay"></div>
 
+
+    <!-- Profile edit modal -->
+    <div class="profile-modal-container scroll-bar hidden" id="profile-modal">
+        <p class="heading-1">Profile</p>
+        <div class="profile-modal">
+            <form action="{% url 'profile_update_process' %}" method="POST" id="profile_update" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="names">
+                    <div class="first-input">
+                        <p class="lable-primary">First Name</p>
+                        <input type="text" name="firstname" id="firstname" class="text-input" pattern="[a-zA-Z].{2,}" title="First name shold be longer than 3 characters and only alphabets" value="{{ profile.first_name }}" required>
+                    </div>
+                    <div class="last-input">
+                        <p class="lable-primary">Last Name</p>
+                        <input type="text" name="lastname" id="lastname" class="text-input" pattern="[a-zA-Z].{2,}" title="Last name shold be longer than 3 characters and only alphabets" value="{{ profile.last_name }}" required>
+                    </div>
+                </div>
+                <div class="image-input">
+                    <p class="lable-primary">Profile image</p>
+                    <p id="image_error_message"></p>
+                    <div class="image-upload">
+                        <label for="profile_image" class="file-input">Choose Image</label>
+                        <span class="text" id="preview"> No file selected</span>
+                    </div>
+                    <input type="file" name="profile_image" id="profile_image" class="file-input" onchange="loadFile(event)" accept="image/*">
+                </div>
+                <div class="genre-input">
+                    <p class="lable-primary">Select favorite genres</p>
+                    <p id="genre_error_message"></p>
+                    <div class="genre-list">
+                        {% for key,value in genre_choices.items %}
+                            <div>
+                                <input type="checkbox" name="genre" id="genre" value="{{ key }}" class="check-box-input"
+                                {% for genre in profile.favorite_genre.all %}
+                                    {% if key == genre.name %}
+                                        checked
+                                    {% endif %}
+                                {% endfor %}
+                                >
+                                <span class="lable-secondary">{{ value }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a href="javascript:{document.getElementById('logout').submit()}" class="btn btn-primary logout-profile"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </form>
+            <div class="action-button">
+                <p class="btn btn-secondary" id="profile-modal-close">Cancel</p>
+                <a href="javascript:{profile_update()}" class="btn btn-primary">Save</a>
+            </div>
+        </div>
+    </div>
+    <div class="profile-background-overlay hidden" id="profile-overlay"></div>
+
+
     <!-- Footer -->
     <div class="container">
         <div class="footer">
@@ -405,11 +461,114 @@
         }
 
 
+        // Open close suggest friend modal
+        let profile_modal = document.getElementById('profile-modal');
+        let profile_overlay = document.getElementById('profile-overlay');
+        let profile_modal_close = document.getElementById('profile-modal-close');
+        let profile_modal_open = document.getElementById('profile-modal-open');
+
+        function close_profile_modal()
+        {
+            profile_modal.classList.add('hidden');
+            profile_overlay.classList.add('hidden');
+        }
+
+        function open_profile_modal()
+        {
+            profile_modal.classList.remove('hidden');
+            profile_overlay.classList.remove('hidden');
+        }
+
+        profile_modal_open.addEventListener('click', open_profile_modal);
+        profile_overlay.addEventListener('click', close_profile_modal);
+        profile_modal_close.addEventListener('click', close_profile_modal);
+
+
         // removie last commas
         genre_element = document.getElementById('favorite_genre');
         let genre_list = genre_element.innerHTML;
         genre_list = remove_character(genre_list, genre_list.lastIndexOf(","));
         genre_element.innerHTML = genre_list;
+
+
+        // laoding the image name
+        function loadFile(event)
+        {
+            console.log("Selected")
+            var output = document.getElementById('preview');
+            output.textContent = event.target.files[0]['name']
+        }
+
+        // Profile setup form
+        function profile_update()
+        {
+            let formValid = document.getElementById('profile_update').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('profile_update').submit();
+            }
+            else
+            {
+                let firstnameValid = document.getElementById('firstname').checkValidity();
+                let lastnameValid = document.getElementById('lastname').checkValidity();
+                let imageValid = document.getElementById('profile_image').checkValidity();
+                let genres = document.getElementsByClassName('check-box-input');
+                let genresValid = false;
+
+                if (firstnameValid == false)
+                {
+                    document.getElementById('firstname').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('firstname').classList.remove('text-error');
+                }
+
+                if (lastnameValid == false)
+                {
+                    document.getElementById('lastname').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('lastname').classList.remove('text-error');
+                }
+
+                if (imageValid == false)
+                {
+                    let imageErrorMessage = document.getElementById('image_error_message');
+                    imageErrorMessage.textContent = "*please provide image file";
+                    imageErrorMessage.style.color = "var(--button-primary-color)"
+                }
+                else
+                {
+                    let imageErrorMessage = document.getElementById('image_error_message');
+                    imageErrorMessage.textContent = "";
+                }
+
+                for (let i = 0; i < genres.length; i++)
+                {
+                    if (genres[i].checked == true)
+                    {
+                        genresValid = true;
+                    }
+                }
+
+                console.log(genresValid);
+
+                if (genresValid == false)
+                {
+                    let imageErrorMessage = document.getElementById('genre_error_message');
+                    imageErrorMessage.textContent = "*please select at least one genre";
+                    imageErrorMessage.style.color = "var(--button-primary-color)"
+                }
+                else
+                {
+                    let imageErrorMessage = document.getElementById('genre_error_message');
+                    imageErrorMessage.textContent = "";
+                }
+            }
+        }
     </script>
 </body>
 </html>

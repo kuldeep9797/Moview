@@ -32,7 +32,7 @@
 
 .text-input
 {
-    width: 280px;
+    width: 100%;
 }
 
 
@@ -128,5 +128,33 @@
 .suggest-modal-container > .suggest-modal > .name-input > .text-input
 {
     margin-right: 0rem;
+}
+/* ------------------------------------------------------------- */
+
+
+/** Profile edit modal------------------------------------------------- */
+.profile-modal-container
+{
+    width: 95%;
+}
+
+.profile-modal-container > .profile-modal
+{
+    margin: 0 1rem;
+}
+
+.profile-modal-container > .profile-modal > form > .names
+{
+    flex-direction: column;
+}
+
+.profile-modal-container > .profile-modal > form > .names > div
+{
+    margin-right: 0rem;
+}
+
+.profile-modal-container > .profile-modal > form > .genre-input > .genre-list
+{
+    grid-template-columns: 1fr 1fr;
 }
 /* ------------------------------------------------------------- */

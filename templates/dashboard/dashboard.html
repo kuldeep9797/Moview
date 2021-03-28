@@ -215,6 +215,8 @@
                     {% endif %}
                 </div>
                 <br>
+                <p class="btn btn-primary" id="request-modal-open">Request Movie</p>
+                <br>
                 <p class="lable-primary">Your Friends</p>
                 <div class="firend-list scroll-bar">
                     {% if your_friends %}
@@ -317,6 +319,35 @@
         </div>
     </div>
     <div class="profile-background-overlay hidden" id="profile-overlay"></div>
+
+
+    <!-- Request movie modal -->
+    <div class="request-modal-container scroll-bar hidden" id="request-modal">
+        <p class="heading-1">Movie Request</p>
+        <div class="request-modal">
+            <form action="{% url 'movie_request' %}" method="POST" id="request_movie" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="movie-input">
+                    <p class="lable-primary">Movie Name</p>
+                    <input type="text" name="moviename" id="moviename" class="text-input" title="Movie name is required" required>
+                </div>
+                <div class="release-input">
+                    <p class="lable-primary">Release Year</p>
+                    <select id="releaseyear" name="releaseyear" class="text-input scroll-bar" required>
+                        <option selected="true" disabled="disabled" value="">Select year</option>
+                        {% for key,value in year_choices.items %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <div class="action-button">
+                <p class="btn btn-secondary" id="request-modal-close">Cancel</p>
+                <a href="javascript:{request_movie_form()}" class="btn btn-primary">Send</a>
+            </div>
+        </div>
+    </div>
+    <div class="request-background-overlay hidden" id="request-overlay"></div>
 
 
     <!-- Footer -->
@@ -461,7 +492,7 @@
         }
 
 
-        // Open close suggest friend modal
+        // Open close edit profile modal
         let profile_modal = document.getElementById('profile-modal');
         let profile_overlay = document.getElementById('profile-overlay');
         let profile_modal_close = document.getElementById('profile-modal-close');
@@ -566,6 +597,64 @@
                 {
                     let imageErrorMessage = document.getElementById('genre_error_message');
                     imageErrorMessage.textContent = "";
+                }
+            }
+        }
+
+
+        // Open close request movie modal
+        let request_modal = document.getElementById('request-modal');
+        let request_overlay = document.getElementById('request-overlay');
+        let request_modal_close = document.getElementById('request-modal-close');
+        let request_modal_open = document.getElementById('request-modal-open');
+
+        function close_request_modal()
+        {
+            request_modal.classList.add('hidden');
+            request_overlay.classList.add('hidden');
+        }
+
+        function open_request_modal()
+        {
+            request_modal.classList.remove('hidden');
+            request_overlay.classList.remove('hidden');
+        }
+
+        request_modal_open.addEventListener('click', open_request_modal);
+        request_overlay.addEventListener('click', close_request_modal);
+        request_modal_close.addEventListener('click', close_request_modal);
+
+        // Profile setup form
+        function request_movie_form()
+        {
+            let formValid = document.getElementById('request_movie').checkValidity();
+
+            if (formValid == true)
+            {
+                document.getElementById('request_movie').submit();
+            }
+            else
+            {
+                let movienameValid = document.getElementById('moviename').checkValidity();
+                let releaseyearValid = document.getElementById('releaseyear').checkValidity();
+                console.log(releaseyearValid)
+
+                if (movienameValid == false)
+                {
+                    document.getElementById('moviename').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('moviename').classList.remove('text-error');
+                }
+
+                if (releaseyearValid == false)
+                {
+                    document.getElementById('releaseyear').classList.add('text-error');
+                }
+                else
+                {
+                    document.getElementById('releaseyear').classList.remove('text-error');
                 }
             }
         }

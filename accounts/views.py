@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from movie.options import genre_choices, year_choices
 from .models import WatchList, FavoriteList, Profile, FriendShip, Notification
-from movie.models import Gerne
+from movie.models import Gerne, MovieRequest
 from accounts.templatetags.profile_data import get_profile_image, get_profile_name, get_profile_genre
 
 
@@ -202,6 +202,7 @@ def dashboard(request):
         'genre_choices': genre_choices,
         "notification": notification,
         "profile": profile,
+        "year_choices": year_choices,
     }
     return render(request, 'dashboard/dashboard.html', context)
 
@@ -429,5 +430,21 @@ def user_list(request):
             return JsonResponse(data, safe=False)
         else:
             return JsonResponse("None", safe=False)
+    else:
+        return redirect('login')
+
+
+# Movie request handler
+# -----------------------------------------------------
+def movie_request(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        movie_name = request.POST.get('moviename')
+        release_year = request.POST.get('releaseyear')
+
+        new_movie = MovieRequest(user_id=request.user, movieName=movie_name, release_year=release_year)
+        new_movie.save()
+        
+        messages.success(request, "Movie request send successfully.")
+        return redirect('dashboard')
     else:
         return redirect('login')

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Movie, Review, Gerne
+from .models import Movie, Review, Gerne, MovieRequest
 # Register your models here.
 
 @admin.register(Movie)
@@ -21,5 +21,12 @@ class MovieAdmin(admin.ModelAdmin):
 class GerneAdmin(admin.ModelAdmin):
     list_display = ['name',]
     search_fields = ('name',)
+    list_per_page = 25
+
+@admin.register(MovieRequest)
+class MovieRequestAdmin(admin.ModelAdmin):
+    list_display = ['__str__',]
+    search_fields = ('user_id','movieName')
+    list_filter = ('release_year',)
     list_per_page = 25
 

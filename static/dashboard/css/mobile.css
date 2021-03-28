@@ -35,6 +35,10 @@
     width: 100%;
 }
 
+select.text-input
+{
+    width: 100%;
+}
 
 .radio-input
 {
@@ -156,5 +160,18 @@
 .profile-modal-container > .profile-modal > form > .genre-input > .genre-list
 {
     grid-template-columns: 1fr 1fr;
+}
+/* ------------------------------------------------------------- */
+
+
+/** Request movie modal------------------------------------------------- */
+.request-modal-container
+{
+    width: 90%;
+}
+
+.request-modal-container > .request-modal
+{
+    margin: 0 1rem;
 }
 /* ------------------------------------------------------------- */
